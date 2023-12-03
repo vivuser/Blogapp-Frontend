@@ -22,5 +22,17 @@
     "eslint-config-next": "14.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.3.0"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vivuser/blogappaka.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vivuser/blogappaka/issues"
+  },
+  "homepage": "https://github.com/vivuser/blogappaka#readme"
 }

@@ -13,15 +13,15 @@ export default function SinglePost({params}) {
         post && setPost(post);
     }
 
-    const fetchComments = async(postId) => {
-        try {
-            const res = await fetch(`http://localhost:3001/blogs/${postId}/comments`);
-            const comments = await res.json();
-            setShowComment(comments)
-        } catch (error) {
-            console.error('Error fetching comments', error);
-        }
-    }
+    // const fetchComments = async(postId) => {
+    //     try {
+    //         const res = await fetch(`http://localhost:3001/blogs/${postId}/comments`);
+    //         const comments = await res.json();
+    //         setShowComment(comments)
+    //     } catch (error) {
+    //         console.error('Error fetching comments', error);
+    //     }
+    // }
 
     useEffect(() => {
         fetchPost(params.id);
@@ -51,26 +51,26 @@ export default function SinglePost({params}) {
 
     return (
         <div className="p-6">
-            <article>
-                <h1 className="text-2xl font-bold flex justify-center p-2">{post?.title}</h1>
-                <p className="min-h-fit">{post?.content}</p>
+                <h1 className="text-3xl font-bold flex items-center justify-center p-2 text-orange-300">{post?.title}</h1>
+            <article className="flex items-center justify-center">
+                <p className="text-xl flex items-center justify-center">{post?.content}</p>
             </article>
 
 
             <div className="font-bold mt-10">
-                    <h1>Add a addComment</h1>
+                    <h1 className="text-xl text-orange-300">Say something...</h1>
                 <input placeholder= "Add comments" className="p-2 border border-t-2 border-black h-16 w-96"
                 value={addComment}
                 onChange={e=>setAddComment(e.target.value)}></input>
                 </div>
-                <button className="bg-gray-200 pl-4 pr-4 m-3 rounded-md hover:bg-gray-300"
+                <button className="bg-yellow-400 pl-4 pr-4 mt-3 mb-6 rounded-md hover:bg-yellow-300 text-md"
                 onClick={handleComment}>Post</button>
 
                 <div>
-                    <h2>Comments</h2>
+                    <h2 className="text-2xl font-semibold text-orange-400 underline">Comments</h2>
                     <ul>
-                        {showComment?.map((comment) => (
-                        <li key={comment._id}>{comment.id}</li>
+                        {(post?.comment)?.map((comment) => (
+                        <li key={comment._id} className="">{comment.text}</li>
                         ))
                         }
                     </ul>
