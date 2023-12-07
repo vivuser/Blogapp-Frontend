@@ -13,6 +13,10 @@ const handleRegisterClick= () => {
     setRegister((prev)=> !prev)
 }
 
+const handleSubmit = async () => {
+  const response = await fetch('')
+}
+
     return (
         <div className="m-6 bg-white p-4 pb-8 max-w-md mx-auto rounded-md shadow-xl">
           {register ? (
@@ -48,7 +52,8 @@ const handleRegisterClick= () => {
         />)
         }
         </div>
-        <button className="bg-yellow-300 flex mx-auto p-2 rounded-md hover:bg-yellow-400">
+        <button className="bg-yellow-300 flex mx-auto p-2 rounded-md hover:bg-yellow-400"
+        onClick={handleSubmit}>
           Submit
         </button>
         <br/>
