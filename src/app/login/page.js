@@ -1,23 +1,75 @@
 "use client"
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import  axios  from "axios";
+import { useEffect, useState } from "react";
 
 const Login = () => {
-const [data,setData]=useState();
+const [email,setEmail]=useState();
 const [password,setPassword]=useState();
 const [confirmPassword, setConfirmPassword] = useState();
-const [signin, setSignIn] = useState(true)
+const [isLoggedin, setIsLoggedin] = useState(false)
 const [register, setRegister] = useState(false)
+
+useEffect(() => {
+  const storedUserData = localStorage.getItem('userData');
+  if  (storedUserData) {
+    setIsLoggedin(true)
+  }
+}, [])
 
 const handleRegisterClick= () => {
     setRegister((prev)=> !prev)
 }
 
-const handleSubmit = async () => {
-  const response = await fetch('')
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try{
+  const response = await axios.post('http://localhost:3001/auth/signup', {
+    email,
+    password,
+    confirmPassword
+  });
+  console.log(response.data, 'shsgsjgh')
+  setEmail("")
+  setPassword("")
+  setConfirmPassword("")
+} catch (error){
+  console.error(error)
+}
 }
 
-    return (
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try{
+  const response = await axios.post('http://localhost:3001/auth/login', {
+    email,
+    password,
+  });
+  const userData   = response.data;
+  localStorage.setItem('userData', JSON.stringify(userData));
+  setEmail("")
+  setPassword("")
+  setIsLoggedin(true);
+} catch (error){
+  console.error(error)
+}
+}
+
+  return (  
+      isLoggedin ? (<>
+      <div className="m-4 flex flex-col items-center justify-center">
+      <h1 className="text-2xl font-bold">Welcome back!
+      </h1>
+      </div>
+      <div className="m-4">
+      <h2 className="text-lg font-bold">
+      Continue Reading where you left
+      </h2>
+      </div>
+      </>   )
+       : 
+
+
         <div className="m-6 bg-white p-4 pb-8 max-w-md mx-auto rounded-md shadow-xl">
           {register ? (
             <h1 className="flex justify-center m-4 text-xl font-bold">Register and save your posts</h1>
@@ -30,8 +82,8 @@ const handleSubmit = async () => {
         <TextField
           id="outlined-error-helper-text"
           label="email"
-          value={data}
-          onChange={(e)=>setData(e.target.value)}
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
           className="m-3"
         />
              <TextField
@@ -52,10 +104,20 @@ const handleSubmit = async () => {
         />)
         }
         </div>
+        {register ?
+        (
         <button className="bg-yellow-300 flex mx-auto p-2 rounded-md hover:bg-yellow-400"
         onClick={handleSubmit}>
           Submit
         </button>
+        ) :
+        (
+          <button className="bg-yellow-300 flex mx-auto p-2 rounded-md hover:bg-yellow-400"
+          onClick={handleLogin}>
+            Submit
+          </button>
+        )
+}
         <br/>
         <br/>
         <div className="flex justify-center">

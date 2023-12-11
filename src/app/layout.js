@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from './header/page'
 import { Nunito } from 'next/font/google'
+import { UserProvider } from '../../context/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,10 +15,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <UserProvider >
     <html lang="en">
       <body className={font.className}>
         <Header/>
         {children}</body>
     </html>
+    </UserProvider>
   )
 }

@@ -10,6 +10,7 @@ export default function Home() {
   const [title, setTitle] = useState('');
   const [showPad, setShowPad] = useState(false);
 
+  const userId = JSON.parse(localStorage.getItem('userData'))?.userId
 
   const handleSubmit = async (  ) => {
      try {
@@ -20,8 +21,9 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title, content: postContent,
-          
+          title, 
+          content: postContent,
+          userId: userId
         })
       })
 
