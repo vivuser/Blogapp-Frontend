@@ -7,6 +7,7 @@ import { useUser } from "../../../context/UserContext";
 
 const Login = () => {
 const [ userId , setUserId ] = useState(null);
+const [ name, setName ] =useState();
 const [email,setEmail]=useState();
 const [password,setPassword]=useState();
 const [confirmPassword, setConfirmPassword] = useState();
@@ -37,11 +38,13 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   try{
   const response = await axios.post('http://localhost:3001/auth/signup', {
+    name, 
     email,
     password,
     confirmPassword
   });
   console.log(response.data, 'shsgsjgh')
+  setName("")
   setEmail("")
   setPassword("")
   setConfirmPassword("")
@@ -112,8 +115,14 @@ console.log(myPosts)
            return (<>
            <div key={String(post._id)}
            className="bg-gray-100 border p-4 mb-4 rounded">
+            <div className="flex justify-between">
             <h1 className="font-bold text-xl mb-2">{post?.title}</h1>
+            <button className="text-xs m-2 bg-red-400 p-2 rounded-md text-white font-bold hover:bg-red-500">DELETE</button>
+            </div>
+            <div className="flex justify-between">
             <h2 className="text-gray-700">{post?.content}</h2>
+            <button className="text-xs m-2 bg-green-400 px-4 p-2 rounded-md text-white font-bold hover:bg-green-500">EDIT</button>
+            </div>
             </div>
             </>)
           })
@@ -134,6 +143,16 @@ console.log(myPosts)
           )
           }
         <div className="flex flex-col max-w-md mx-auto">
+            
+           { register &&
+        <TextField
+          id="outlined-error-helper-text"
+          label="name"
+          value={name}
+          onChange={(e)=>setName(e.target.value)}
+          className="m-3"
+        />
+           }
         <TextField
           id="outlined-error-helper-text"
           label="email"
