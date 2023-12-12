@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 
 export default function Home() {
-
+  
   const [postContent, setPostContent] = useState('');
   const [title, setTitle] = useState('');
   const [showPad, setShowPad] = useState(false);

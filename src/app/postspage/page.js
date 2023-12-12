@@ -10,6 +10,7 @@ export default async function PostsPage() {
 return (<>
                 <div>
                 <h1 className="flex justify-center items-center text-2xl m-4 font-bold">Featured</h1>
+                
                 </div>
                 <div className="max-w-screen-2xl mx-auto flex flex-wrap">
                 {posts?.map(post => (

@@ -1,4 +1,5 @@
 'use client'
+import { Grid } from '@mui/material';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 
@@ -13,7 +14,7 @@ const About = () => {
     hidden: { opacity: 0, y: 50 },
   };
 
-  return (
+  return (<>
         <div className="max-w-screen-lg mx-auto">
         <h1 className="flex justify-center items-center text-xl font-bold m-4 p-2 rounded-lg">About</h1>
         <motion.div
@@ -35,8 +36,10 @@ const About = () => {
           {/* Add more content here */}
         </div>
       </motion.div>
+
     </div>
-  );
+  
+  </>);
 };
 
 export default About;
