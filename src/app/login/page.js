@@ -15,6 +15,10 @@ const [isLoggedin, setIsLoggedin] = useState(false)
 const [register, setRegister] = useState(false)
 const [myPosts, setMyPosts] = useState([])
 const [showPosts, setShowPosts] = useState(false);
+const [editedPost, setEditedPost] = useState({
+  title: '',
+  content: '',
+})
 
 
 useEffect(() => {
@@ -84,7 +88,64 @@ const handleAllUserPost =  async () => {
   }
 }
 
-console.log(myPosts)
+const handleDeletePost = async (postId, userId) => {
+  try {
+    const response = await axios.delete(`http://localhost:3001/blogs/${postId}`, {
+      headers: {
+        'Authorization': `Bearer ${process.env.AUTH
+      }`,
+      },
+      data: { userId }
+    });
+
+    if (response.status === 200) {
+      const UpdatedPosts = myPosts.filter(post => post._id !== postId);
+      setMyPosts(UpdatedPosts)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const handleEditPost = async (_id, userId) => {
+
+  const response = await fetch(`http://localhost:3001/blogs/${_id}`)
+  console.log(response, 'response of single post')
+  const postToEdit = myPosts.find(post => post._id === _id);
+  setEditedPost({ 
+    title: postToEdit.title,
+    content: postToEdit.content,
+  });
+
+
+
+}
+
+const handleSaveEdit = async (postId, userId) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3001/blogs/${postId}`,
+      {
+        title: editedPost.title,
+        content: editedPost.content
+      }, 
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.AUTH}`,
+        },
+      }
+    );
+    if (response.status === 200) {
+      const UpdatedPosts = myPosts.map(post => 
+        post._id === postId? { ...post, title: editedPost.title, content: editedPost.content } : post
+        );
+      setMyPosts(UpdatedPosts)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 
   return (  
       isLoggedin ? (<>
@@ -117,11 +178,13 @@ console.log(myPosts)
            className="bg-gray-100 border p-4 mb-4 rounded">
             <div className="flex justify-between">
             <h1 className="font-bold text-xl mb-2">{post?.title}</h1>
-            <button className="text-xs m-2 bg-red-400 p-2 rounded-md text-white font-bold hover:bg-red-500">DELETE</button>
+            <button className="text-xs m-2 bg-red-400 p-2 rounded-md text-white font-bold hover:bg-red-500"
+            onClick={() =>handleDeletePost(post._id, post.userId)}>DELETE</button>
             </div>
             <div className="flex justify-between">
             <h2 className="text-gray-700">{post?.content}</h2>
-            <button className="text-xs m-2 bg-green-400 px-4 p-2 rounded-md text-white font-bold hover:bg-green-500">EDIT</button>
+            <button className="text-xs m-2 bg-green-400 px-4 p-2 rounded-md text-white font-bold hover:bg-green-500"
+            onClick={() => handleEditPost(post._id, post.userId)}>EDIT</button>
             </div>
             </div>
             </>)

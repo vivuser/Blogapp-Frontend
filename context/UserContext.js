@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
         const localUserId = JSON.parse(localStorage.getItem('userData'))?.userId
         const localUserName = JSON.parse(localStorage.getItem('userData'))?.name
         console.log(localUserId, 'localUserId')
+        console.log(localUserName, 'localUserName')
         setUserId(localUserId)
         setUserName(localUserName)
     }, [])
