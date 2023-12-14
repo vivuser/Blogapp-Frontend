@@ -19,6 +19,7 @@ const [editedPost, setEditedPost] = useState({
   title: '',
   content: '',
 })
+const [ modal, setModal] = useState(false)
 
 
 useEffect(() => {
@@ -78,7 +79,7 @@ const handleLogin = async (e) => {
 
 const handleAllUserPost =  async () => {
   try {
-    const response = await fetch(`http://localhost:3001/blogs/${userId}`) 
+    const response = await fetch(`http://localhost:3001/blogs/user/${userId}`) 
     const userPosts = await response.json()
     console.log(userPosts, 'userPosts')
     setShowPosts((prev) => !prev)
@@ -117,14 +118,17 @@ const handleEditPost = async (_id, userId) => {
     content: postToEdit.content,
   });
 
-
+  setModal(true)
+  console.log(modal)
 
 }
 
-const handleSaveEdit = async (postId, userId) => {
+const handleSaveEdit = async (id) => {
+  {console.log(myPosts[0]._id, ' iisuusui')}
+
   try {
     const response = await axios.put(
-      `http://localhost:3001/blogs/${postId}`,
+      `http://localhost:3001/blogs/${id}`,
       {
         title: editedPost.title,
         content: editedPost.content
@@ -168,6 +172,35 @@ const handleSaveEdit = async (postId, userId) => {
         {showPosts ? 'Close my posts' : 'My Posts'}
       </button>
       </div>
+
+      {
+            modal && ( 
+              <>
+            <div
+            className="fixed inset-0 bg-black opacity-50 z-40"
+            onClick = {() => setModal(false)}
+            >
+            </div>
+            <div className="text-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg z-50 max-w-screen-lg mx-auto p-4">
+              <input
+              type="text"
+              value={editedPost.title}
+              onChange={(e) => setEditedPost(e.target.value)}
+              className="text-2xl p-2 w-full my-4"
+              />
+              <textarea
+              value={editedPost.content}
+            onChange={(e) => setEditedPost(e.target.value)}
+            className="text-md p-2 w-full"
+          />
+          <button className="bg-yellow-300 p-2 px-4 rounded-md hover:bg-yellow-400"
+          onClick={handleSaveEdit(myPosts[0]?._id)}
+          >Save</button>
+            </div>
+            </>)
+            
+          }
+
 
       {showPosts && 
       <div className="flex flex-col m-4">
@@ -262,7 +295,8 @@ const handleSaveEdit = async (postId, userId) => {
         <button className="px-2 underline-offset-2" style={{ textDecoration: 'underline' }}
         onClick={handleRegisterClick}>{register ? 'Login' : 'Register'}</button>
         </div>
-        </div>
+       </div>
+
     )
 }
 
