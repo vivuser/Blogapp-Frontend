@@ -114,6 +114,7 @@ const handleEditPost = async (_id, userId) => {
   console.log(response, 'response of single post')
   const postToEdit = myPosts.find(post => post._id === _id);
   setEditedPost({ 
+    _id: _id,
     title: postToEdit.title,
     content: postToEdit.content,
   });
@@ -123,33 +124,20 @@ const handleEditPost = async (_id, userId) => {
 
 }
 
-const handleSaveEdit = async (id) => {
-  {console.log(myPosts[0]._id, ' iisuusui')}
-
+const handleSaveEdit = async () => {
+  console.log(editedPost._id, 'editedPost')
   try {
     const response = await axios.put(
-      `http://localhost:3001/blogs/${id}`,
-      {
-        title: editedPost.title,
-        content: editedPost.content
-      }, 
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.AUTH}`,
-        },
-      }
-    );
-    if (response.status === 200) {
-      const UpdatedPosts = myPosts.map(post => 
-        post._id === postId? { ...post, title: editedPost.title, content: editedPost.content } : post
-        );
-      setMyPosts(UpdatedPosts)
-    }
-  } catch (err) {
-    console.log(err);
-  }
+      `http://localhost:3001/blogs/${editedPost._id}`, {
+      
+      title: editedPost.title,
+      content: editedPost.content
+  });
+} catch (err){
+  console.error(err);
 }
 
+}
 
   return (  
       isLoggedin ? (<>
@@ -185,16 +173,16 @@ const handleSaveEdit = async (id) => {
               <input
               type="text"
               value={editedPost.title}
-              onChange={(e) => setEditedPost(e.target.value)}
+              onChange={(e) => setEditedPost({ ...editedPost, title: e.target.value })}
               className="text-2xl p-2 w-full my-4"
               />
               <textarea
               value={editedPost.content}
-            onChange={(e) => setEditedPost(e.target.value)}
+            onChange={(e) => setEditedPost({ ...editedPost, content: e.target.value })}
             className="text-md p-2 w-full"
           />
           <button className="bg-yellow-300 p-2 px-4 rounded-md hover:bg-yellow-400"
-          onClick={handleSaveEdit(myPosts[0]?._id)}
+          onClick={handleSaveEdit}
           >Save</button>
             </div>
             </>)

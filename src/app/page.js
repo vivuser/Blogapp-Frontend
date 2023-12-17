@@ -1,7 +1,8 @@
 'use client'
 import { TextField } from '@mui/material'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import  axios  from 'axios';
 
 
 export default function Home() {
@@ -9,10 +10,29 @@ export default function Home() {
   const [postContent, setPostContent] = useState('');
   const [title, setTitle] = useState('');
   const [showPad, setShowPad] = useState(false);
+  const [ topics, setTopics ] =useState([]);
+  const [showTags, setShowTags] = useState(false)
+  const [postTopics, setPostTopics] = useState('') 
+  const [matchingTags, setMatchingTags] = useState([])
+
+  const availableTags = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Java', 'C#', 'PHP'];
+
+  const handleTagInputChange = (e) => {
+    const inputText = e.target.value.toLowerCase();
+    const matchingTags = availableTags.filter((tag) =>
+     tag.toLowerCase().includes(inputText));
+    setMatchingTags(matchingTags);
+    setPostTopics(e.target.value);
+  }
+
+  const handleTagSelection = (selectedTag) => {
+    setPostTopics(selectedTag);
+    setMatchingTags([])
+  };
 
   const userId = JSON.parse(localStorage.getItem('userData'))?.userId
 
-  const handleSubmit = async (  ) => {
+  const handleSubmit = async () => {
      try {
 
       const response = await fetch('http://localhost:3001/blogs', {
@@ -23,6 +43,7 @@ export default function Home() {
         body: JSON.stringify({
           title, 
           content: postContent,
+          tags :postTopics,
           userId: userId
         })
       })
@@ -43,7 +64,44 @@ export default function Home() {
 const handleAddPost = () =>{
   setShowPad((prev) => !prev);
 }
+
+const handleTopicClick = (topic) => {
+  console.log(topic)
+  setTopics((prevTopics) => {
+    if (Array.isArray(prevTopics)) {
+      if (prevTopics.includes(topic)) {
+        return prevTopics.filter((t) => t!==topic );
+      } else {
+        return [...prevTopics, topic];
+      } 
+    } else {
+        return [topic]
+      }
+  })
+}
+
+const handleClearTopics = () => {
+  setTopics([]);
+}
+
+const handleSaveTopics = async () => {
+  try {
+  console.log(userId, topics  )
+  const response = await axios.put(`http://localhost:3001/blogs/topics/${userId}`,
+  {topics: topics},
+  )
+  } catch (error) {
+  console.error(error)
+  }
+}
   
+useEffect(() => {
+  console.log(topics);
+}, [topics]);
+
+const showTagsHandler = () => {
+    setShowTags((prev) => !prev);
+}
 
   return (
         <div className=''>
@@ -93,16 +151,30 @@ const handleAddPost = () =>{
         </div>
 
         <div className='my-8'>
-        <h1 className='text-xl'>Select your picks from the categories and only read those</h1>
-         <div className='flex m-6 justify-center'>
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>React</p>
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>Next</p> 
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>Node</p> 
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>Django</p> 
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>Mongodb</p> 
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>SQL</p> 
-         <p className='mx-2 bg-slate-200 p-2 px-4 rounded-full hover:bg-slate-300 cursor-pointer'>Python</p> 
-         </div>
+        <h1 className='text-xl'>
+        Select your picks from the categories and only read those
+        </h1>
+        <div className='flex flex-wrap m-6 justify-center max-w-screen-lg mx-auto bg-pink-100 shadow-lg rounded-full m-8 p-4 px-8'>
+        <div className='flex flex-wrap mx-auto items-center justify-center'> 
+        {['React', 'Next', 'Node', 'Django', 'Mongodb', 'SQL', 'Python', 'Angular', 'Jmeter', 'Postman', 'Magento', 'Wordpress', 'Dynamodb', 'Javascript', 'Java', 'Selenium', 'Automation', 'Devops', 'Cloud', 'Data Analysis'].map((topic) => (
+          <div key={topic}>
+          <button
+          className={`mx-3 my-3 bg-slate-300 p-2 px-4 rounded-full hover:bg-slate-400 cursor-pointer
+          ${topics?.includes(topic) ? 'bg-pink-400 text-white' : ''}`}
+          onClick={() => handleTopicClick(topic)}
+          >
+          {topic} {topics?.includes(topic) && <span>X</span>}
+          </button>
+        </div>
+        ))}
+        </div>
+        <div className='mt-3'>
+          <button className='bg-yellow-300 p-2 px-5 font-bold rounded-md hover:bg-yellow-400'
+          onClick={handleClearTopics}>Clear</button>
+          <button className='bg-yellow-300 mx-3 p-2 px-5 font-bold rounded-md hover:bg-yellow-400'
+          onClick={handleSaveTopics}>Save</button>
+          </div>
+        </div>
         </div>
 
 
@@ -120,13 +192,18 @@ const handleAddPost = () =>{
 
           {
            showPad &&  (<>
+
+           <div className='text-center fixed top-0 left-0 w-full h-full bg-white shadow-lg z-50 mx-auto p-4'>
+           <button className='bg-black rounded-full text-white px-4 py-2 m-4 absolute top-4 left-4 z-50'
+           onClick={handleAddPost}>Back</button>
          
          <div className='flex 
          flex-col 
          justify-center 
-         items-center'>
-          <div>
+         items-center mt-10'>
           
+          <div className='flex flex-col relative'>
+            <div>
           <TextField 
           id="outlined-basic" 
           label="Title" 
@@ -135,21 +212,53 @@ const handleAddPost = () =>{
           onChange={(e) => setTitle(e.target.value)}
           style={{ width: '800px'}}
           />
+
           </div>
+          <div>
+         <button className='bg-slate-600 text-white p-2 my-4 rounded-full left-0 hover:bg-slate-500'
+         onClick={showTagsHandler}>Add Tags</button>
+         </div>
+          </div>
+
+            
+          {
+            showTags && (
+              <div>
+          <TextField 
+          id="outlined-basic" 
+          label="Tags" 
+          variant="outlined"
+          value={postTopics} 
+          onChange={handleTagInputChange}
+          style={{ width: '800px'}}
+          />
+                    {matchingTags.length > 0 && (
+            <div>
+              {matchingTags.map(tag => (
+                <button className="bg-slate-600 text-white p-1 px-2 m-2 rounded-full" key={tag} onClick={() => handleTagSelection(tag)}>
+                  {tag}
+                </button>
+              ))}
+            </div>
+          )}
+              </div>
+            )
+          }
+          
 
           <div className='pt-4'>
           <TextField
           id="outlined-textarea"
           label="Create a post"
           placeholder="Create a post"
-          rows={8}
+          rows={12}
           multiline
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
           style={{ width: '800px'}}
         />
         </div>
-
+        
         <button className='
         bg-pink-100 
         m-4 p-3 px-5
@@ -159,6 +268,8 @@ const handleAddPost = () =>{
         '
         onClick={handleSubmit}>Create</button>
         </div>
+        </div>
+
            </>)}
 
 

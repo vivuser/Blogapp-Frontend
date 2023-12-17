@@ -3,6 +3,7 @@
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react"
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -55,21 +56,27 @@ export default function SinglePost({params}) {
                 setShowCommentPad((prev)=>!prev)
         }
 
+        {console.log(post, 'poast')}
 
     return (
-        <div className="p-6 max-w-screen-xl mx-auto">
-                <h1 className="text-3xl font-bold flex items-center justify-center p-2 m-4">{post?.title}</h1>
+        <div className="p-6 max-w-screen-lg mx-auto">
+            {post && post.length > 0 && ( <>
+                <h1 className="text-3xl font-bold flex items-center justify-center p-2 m-4">{post[0].title}</h1>
+                
             <article className="flex items-center justify-center">
-                <p className="text-lg flex items-center justify-center text-gray-600">{post?.content}</p>
+                <p className="text-lg flex items-center justify-center text-gray-600">{post[0].content}</p>
             </article>
+            Added in 
+            <button className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{post[0].tags}</button>
+            </>)}
 
 
-            <div className="font-bold mt-10">
+            <div className="font-bold mt-10 mb-10">
                     <div className="flex">
-                    <h1 className="text-xl text-slate-500 mr-3 mt-1 bg-yellow-50 rounded-full p-2">Say something</h1>
-                    <button className="bg-slate-500 p-1 rounded-full w-10 text-2xl text-white"
+                    <h1 className="m-4 p-3 text-xl text-slate-600 bg-white shadow-md rounded-full">Say something</h1>
+                    <button className="mx-4 p-1 rounded-full w-10 text-3xl"
                     onClick={handleShowCommentPad}>
-                        {showCommentPad ? 'X' : '+'}</button>
+                        {showCommentPad ?<MapsUgcOutlinedIcon/>  : <MapsUgcOutlinedIcon/>}</button>
                     </div>
 
 
@@ -97,10 +104,11 @@ export default function SinglePost({params}) {
                 <div>
                     <h2 className="text-2xl font-semibold underline">Comments</h2>
                     <ul>
-                        {(post?.comment)?.map((comment) => (
+                        {post && post.length >0 && (<>
+                        {(post[0].comment)?.map((comment) => (
                         <li key={comment._id} className="text-md text-gray-500 my-2">{comment.text}</li>
                         ))
-                        }
+                        } </>)}
                     </ul>
                 </div>
 
