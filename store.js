@@ -19,5 +19,5 @@ const authReducer = (state = initialState, action) => {
 
 const store = createStore(authReducer);
 
-export default store
+export default store;
 

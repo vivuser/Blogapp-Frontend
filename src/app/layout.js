@@ -3,8 +3,7 @@ import './globals.css'
 import Header from './header/page'
 import { Nunito } from 'next/font/google'
 import { UserProvider } from '../../context/UserContext'
-import { Provider } from 'react-redux'
-import store from '../../store'
+import { Providers } from '../../providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +17,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <Provider store={store}>
+    <Providers>
     <UserProvider >
     <html lang="en">
       <body className={font.className}>
@@ -26,6 +25,6 @@ export default function RootLayout({ children }) {
         {children}</body>
     </html>
      </UserProvider>
-     </Provider>
+     </Providers>
   )
 }

@@ -10,6 +10,7 @@ import { useUser } from "../../../../context/UserContext";
 import { Edit } from "@mui/icons-material";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from 'next/navigation';
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -19,6 +20,8 @@ export default function SinglePost({params}) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const isAuthenticated = useSelector((state) => state.isAuthenticated);
     const dispatch = useDispatch();
+
+    const router = useRouter();
 
     const { userName } = useUser(); 
 
@@ -41,10 +44,6 @@ export default function SinglePost({params}) {
     }, [])
 
     const handleComment = async () => {
-        if (!isAuthenticated) {
-            return
-        }
-
         try{
             const res = await fetch(`http://localhost:3001/blogs/${params.id}/comments`, {
             method: 'POST',
@@ -64,10 +63,14 @@ export default function SinglePost({params}) {
                 console.error('Error posting addComment', error);
             }
 
-    }
+}
 
         const handleShowCommentPad = () => {
+            if (isAuthenticated) {
                 setShowCommentPad((prev)=>!prev)
+            }else {
+                router.push('/login');
+            }
         }
 
         {console.log(post, 'poast')}
