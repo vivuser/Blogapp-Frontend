@@ -2,15 +2,21 @@
 import { createStore } from 'redux';
 
 const initialState =  {
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem('user') !==null,
+    userData: null,
 };
 
 const authReducer = (state = initialState, action) => {
     switch(action.type){
         case 'LOGIN':
-            return { ...state, isAuthenticated: true };
+            localStorage.setItem('user', JSON.stringify(action.payload));
+            return {
+                     ...state, 
+                     isAuthenticated: true,
+                     userData:action.payload };
         case 'LOGOUT':
-            return { ...state, isAuthenticated: false };
+            localStorage.removeItem('user')
+            return { ...state, isAuthenticated: false, userData:null };
 
         default: 
             return state;

@@ -3,6 +3,7 @@ import { TextField } from "@mui/material";
 import  axios  from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../../../context/UserContext";
+import { useDispatch } from "react-redux";
 
 
 const Login = () => {
@@ -20,6 +21,7 @@ const [editedPost, setEditedPost] = useState({
   content: '',
 })
 const [ modal, setModal] = useState(false)
+const dispatch = useDispatch();
 
 
 useEffect(() => {
@@ -66,6 +68,9 @@ const handleLogin = async (e) => {
     password,
   });
   const userData   = response.data;
+
+  dispatch({ type: 'LOGIN', payload: userData})
+
   localStorage.setItem('userData', JSON.stringify(userData));
   setEmail("")
   setPassword("")

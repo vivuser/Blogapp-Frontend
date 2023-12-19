@@ -3,7 +3,8 @@ import { TextField } from '@mui/material'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import  axios  from 'axios';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   
@@ -14,6 +15,10 @@ export default function Home() {
   const [showTags, setShowTags] = useState(false)
   const [postTopics, setPostTopics] = useState('') 
   const [matchingTags, setMatchingTags] = useState([])
+  const isAuthenticated = useSelector((state) => state.isAuthenticated)
+  const dispatch = useDispatch();
+  const router = useRouter();
+
 
   const availableTags = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Java', 'C#', 'PHP'];
 
@@ -33,6 +38,7 @@ export default function Home() {
   const userId = JSON.parse(localStorage.getItem('userData'))?.userId
 
   const handleSubmit = async () => {
+
      try {
 
       const response = await fetch('http://localhost:3001/blogs', {
@@ -62,7 +68,14 @@ export default function Home() {
 }
 
 const handleAddPost = () =>{
+  if (isAuthenticated) {
+    console.log(isAuthenticated)
   setShowPad((prev) => !prev);
+}
+else {
+  console.log(isAuthenticated, 'else isAuthenticated')
+  router.push('/login')
+}
 }
 
 const handleTopicClick = (topic) => {

@@ -69,6 +69,7 @@ export default function SinglePost({params}) {
             if (isAuthenticated) {
                 setShowCommentPad((prev)=>!prev)
             }else {
+                console.log(isAuthenticated)
                 router.push('/login');
             }
         }

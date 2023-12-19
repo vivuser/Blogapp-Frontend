@@ -1,10 +1,18 @@
 'use client'
 import Link from "next/link"
 import { useUser } from "../../../context/UserContext"
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
-    const { userName } = useUser();
-    console.log(userName, 'hhh')
+    const userName = useSelector((state) => {
+        console.log(state, 'gg')
+        state.userData
+    })
+
+
+
+    console.log(userName)
+    const dispatch = useDispatch()
 
 
     return (
