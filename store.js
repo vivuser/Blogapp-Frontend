@@ -1,9 +1,11 @@
 'use client'
 import { createStore } from 'redux';
 
+const storedUserData = JSON.parse(localStorage.getItem('userData'))
+
 const initialState =  {
-    isAuthenticated: localStorage.getItem('user') !==null,
-    userData: null,
+    isAuthenticated: storedUserData !== null,
+    userData: storedUserData || null,
 };
 
 const authReducer = (state = initialState, action) => {

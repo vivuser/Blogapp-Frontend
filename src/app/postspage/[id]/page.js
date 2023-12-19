@@ -19,6 +19,7 @@ export default function SinglePost({params}) {
     const [showCommentPad, setShowCommentPad] =useState(false)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const isAuthenticated = useSelector((state) => state.isAuthenticated);
+    const userData = useSelector((state) => state.userData) 
     const dispatch = useDispatch();
 
     const router = useRouter();
@@ -50,7 +51,7 @@ export default function SinglePost({params}) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ text: addComment }),
+            body: JSON.stringify({ author: userData.name, text: addComment, userId: userData.userId }),
             });
 
             if (res.ok) {
@@ -75,6 +76,10 @@ export default function SinglePost({params}) {
         }
 
         {console.log(post, 'poast')}
+
+        const handleEditComment = () => {
+                
+        }
 
 
 
@@ -130,9 +135,11 @@ export default function SinglePost({params}) {
                         {post && post.length >0 && (<>
                         {(post[0].comment)?.map((comment) => (
                         <div className="flex justify-between m-4">
-                        <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{userName?.split(' ')[0]}:<span className="text-black text-xl m-2">{comment.text}</span>
+                        <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:<span className="text-black text-xl m-2">{comment.text}</span>
                         </li>
-                        <EditNoteIcon/>
+                       {isAuthenticated && (userData.userId === comment?.userId) &&
+                        <EditNoteIcon onClick={handleEditComment}/>
+                        }
                         </div>
                         ))
                         } </>)}

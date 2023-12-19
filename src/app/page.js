@@ -18,7 +18,7 @@ export default function Home() {
   const isAuthenticated = useSelector((state) => state.isAuthenticated)
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const userData = useSelector((state) => state.userData);
 
   const availableTags = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Java', 'C#', 'PHP'];
 
@@ -50,7 +50,8 @@ export default function Home() {
           title, 
           content: postContent,
           tags :postTopics,
-          userId: userId
+          userId: userId,
+          author: userData.name
         })
       })
 
