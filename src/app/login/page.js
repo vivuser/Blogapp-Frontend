@@ -71,7 +71,7 @@ const handleLogin = async (e) => {
 
   dispatch({ type: 'LOGIN', payload: userData})
 
-  localStorage.setItem('userData', JSON.stringify(userData));
+  localStorage.setItem('userData', JSON.stringify(userData)); 
   setEmail("")
   setPassword("")
   setIsLoggedin(true);
