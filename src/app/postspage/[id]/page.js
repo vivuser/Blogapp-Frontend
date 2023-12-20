@@ -11,6 +11,7 @@ import { Edit } from "@mui/icons-material";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
+import { format } from "date-fns";
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -86,9 +87,25 @@ export default function SinglePost({params}) {
 
         const handleSaveEditComment = async (commentId) => {
             try {
-                const res = await fetch(`http://localhost:3001/blogs/${params.id}/comments/${commentId}`)
+                const res = await fetch(`http://localhost:3001/blogs/${params.id}/comments/${commentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: editedCommentText }),
+                });
+
+            if (res.ok) {
+                fetchPost(params.id);
+                setEditedCommentId(null);
+                setEditedCommentText("")
+            } else {
+                console.error('Failed to update comment');
             }
+        } catch (error) {
+            console.error('Error updating comment', error)
         }
+    };
 
 
     return (
@@ -102,6 +119,8 @@ export default function SinglePost({params}) {
                 <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{post[0].tags}</span></h3>
                 <h3>Author: 
                 <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{post[0].author}</span></h3>
+                <h3>Date: 
+                <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{format(new Date(post[0].createdAt), 'MMMM dd, yyyy')}</span></h3>
                 <button onClick={handleOpenDrawer}><MapsUgcOutlinedIcon/></button>
                 <Drawer
                 anchor="right"
@@ -145,8 +164,24 @@ export default function SinglePost({params}) {
                         {post && post.length >0 && (<>
                         {(post[0].comment)?.map((comment) => (
                         <div className="flex justify-between m-4">
-                        <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:<span className="text-black text-xl m-2">{comment.text}</span>
+                        <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:
+                        {editedCommentId === comment._id ? (
+                        <>
+                        <input
+                        type="text"
+                        value={editedCommentText}
+                        onChange={(e) => setEditedCommentText(e.target.value)}
+                        className="text-black text-xl m-2"
+                        />
+                        <button onClick={() => handleSaveEditComment(comment._id)}>
+                            Save
+                        </button>
+                        </>
+                        ) : (
+                        <span className="text-black text-xl m-2">{comment.text}</span>
+                        )}
                         </li>
+
                        {isAuthenticated && (userData.userId === comment?.userId) &&
                         <EditNoteIcon onClick={() => handleEditComment(comment._id, comment.text)}/>
                         }
