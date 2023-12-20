@@ -18,6 +18,8 @@ export default function SinglePost({params}) {
     const [showComment, setShowComment] = useState([]);
     const [showCommentPad, setShowCommentPad] =useState(false)
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [editedCommentId, setEditedCommentId] = useState(null);
+    const [editedCommentText, setEditedCommentText] = useState('');
     const isAuthenticated = useSelector((state) => state.isAuthenticated);
     const userData = useSelector((state) => state.userData) 
     const dispatch = useDispatch();
@@ -77,10 +79,16 @@ export default function SinglePost({params}) {
 
         {console.log(post, 'poast')}
 
-        const handleEditComment = () => {
-                
+        const handleEditComment = (commentId,commentText) => {
+            setEditedCommentId(commentId);
+            setEditedCommentText(commentText);
         }
 
+        const handleSaveEditComment = async (commentId) => {
+            try {
+                const res = await fetch(`http://localhost:3001/blogs/${params.id}/comments/${commentId}`)
+            }
+        }
 
 
     return (
@@ -92,6 +100,8 @@ export default function SinglePost({params}) {
                 <div className="flex justify-between m-4">
                 <h3>Tags: 
                 <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{post[0].tags}</span></h3>
+                <h3>Author: 
+                <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{post[0].author}</span></h3>
                 <button onClick={handleOpenDrawer}><MapsUgcOutlinedIcon/></button>
                 <Drawer
                 anchor="right"
@@ -138,7 +148,7 @@ export default function SinglePost({params}) {
                         <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:<span className="text-black text-xl m-2">{comment.text}</span>
                         </li>
                        {isAuthenticated && (userData.userId === comment?.userId) &&
-                        <EditNoteIcon onClick={handleEditComment}/>
+                        <EditNoteIcon onClick={() => handleEditComment(comment._id, comment.text)}/>
                         }
                         </div>
                         ))

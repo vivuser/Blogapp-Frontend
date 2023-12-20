@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import  axios  from "axios";
 import { useEffect, useState } from "react";
 import { useUser } from "../../../context/UserContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const Login = () => {
@@ -12,7 +12,6 @@ const [ name, setName ] =useState();
 const [email,setEmail]=useState();
 const [password,setPassword]=useState();
 const [confirmPassword, setConfirmPassword] = useState();
-const [isLoggedin, setIsLoggedin] = useState(false)
 const [register, setRegister] = useState(false)
 const [myPosts, setMyPosts] = useState([])
 const [showPosts, setShowPosts] = useState(false);
@@ -22,19 +21,8 @@ const [editedPost, setEditedPost] = useState({
 })
 const [ modal, setModal] = useState(false)
 const dispatch = useDispatch();
-
-
-useEffect(() => {
-  const storedUserData = localStorage.getItem('userData');
-  if  (storedUserData) {
-    setIsLoggedin(true)
-    const userDataObject = JSON.parse(storedUserData);
-    const userIdFromStorage = userDataObject.userId;
-    setUserId(userIdFromStorage)
-    console.log('Updated UserId:', userIdFromStorage);
-    console.log(userId)
-  }
-}, [])
+const isAuthenticated = useSelector((state) => state.isAuthenticated)
+const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
 
 
 const handleRegisterClick= () => {
@@ -71,7 +59,6 @@ const handleLogin = async (e) => {
 
   dispatch({ type: 'LOGIN', payload: userData})
 
-  localStorage.setItem('userData', JSON.stringify(userData)); 
   setEmail("")
   setPassword("")
   setIsLoggedin(true);
@@ -145,7 +132,7 @@ const handleSaveEdit = async () => {
 }
 
   return (  
-      isLoggedin ? (<>
+      isAuthenticated ? (<>
       <div className="m-4 flex flex-col items-center justify-center">
 
       <h1 className="text-2xl font-bold">Welcome back!

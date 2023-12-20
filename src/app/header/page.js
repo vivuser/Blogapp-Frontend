@@ -3,10 +3,17 @@ import Link from "next/link"
 import { useUser } from "../../../context/UserContext"
 import { useDispatch, useSelector } from "react-redux";
 import LogoutIcon from '@mui/icons-material/Logout';
+import { type } from "os";
+import { Logout } from "@mui/icons-material";
 
 const Header = () => {
     const userData = useSelector(state => state.userData);
     const dispatch = useDispatch()
+
+    const handleLogout = () => {
+
+    console.log(dispatch ({ type: 'LOGOUT'}))
+    }
 
 
     return (
@@ -30,7 +37,8 @@ const Header = () => {
             {userData ?
             (
             <ul className="flex p-4">
-            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/"><LogoutIcon/></Link></li>       
+            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><LogoutIcon
+            onClick={handleLogout}/></li>       
             </ul>
             ) : ""
 }
