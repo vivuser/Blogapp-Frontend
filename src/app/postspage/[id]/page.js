@@ -21,6 +21,9 @@ export default function SinglePost({params}) {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [editedCommentId, setEditedCommentId] = useState(null);
     const [editedCommentText, setEditedCommentText] = useState('');
+    const [ commentReply, SetCommentReply ] = useState({});
+    const [ replyCommentId, setReplyCommentId] = useState(null)
+    const [ replyText, setReplyText ] = useState('')
     const isAuthenticated = useSelector((state) => state.isAuthenticated);
     const userData = useSelector((state) => state.userData) 
     const dispatch = useDispatch();
@@ -107,6 +110,12 @@ export default function SinglePost({params}) {
         }
     };
 
+    const handleCommentReply = (replyCommentId, replyText) => {
+        SetCommentReply(true);
+        setReplyCommentId(replyCommentId);
+        setReplyText(replyText);
+    }
+
 
     return (
         <div className="p-6 max-w-screen-lg mx-auto">
@@ -171,20 +180,33 @@ export default function SinglePost({params}) {
                         type="text"
                         value={editedCommentText}
                         onChange={(e) => setEditedCommentText(e.target.value)}
-                        className="text-black text-xl m-2"
+                        className="text-black text-xl m-2 w-80"
                         />
-                        <button onClick={() => handleSaveEditComment(comment._id)}>
+                        <button onClick={() => handleSaveEditComment(comment._id)} className="bg-yellow-500 px-2 p-1 rounded-md hover:bg-yellow-400">
                             Save
                         </button>
                         </>
                         ) : (
                         <span className="text-black text-xl m-2">{comment.text}</span>
                         )}
-                        </li>
-
-                       {isAuthenticated && (userData.userId === comment?.userId) &&
-                        <EditNoteIcon onClick={() => handleEditComment(comment._id, comment.text)}/>
+                        {
+                         commentReply && replyCommentId === comment._id && (
+                            <input 
+                            type="text"
+                            value={replyText}
+                            variant="standard"
+                            onChange={(e) => setReplyText(e.target.value)}
+                            className="w-80 ml-16 pt-2 mt-2"/>
+                         )
                         }
+                        </li>
+                        <div className="flex items-center">
+                       { 
+                       isAuthenticated && (userData.userId === comment?.userId) ?
+                        <EditNoteIcon onClick={() => handleEditComment(comment._id, comment.text)} className="text-slate-400 hover:text-slate-600"/> : <MapsUgcOutlinedIcon
+                        className="text-slate-400 hover:text-slate-600" key={comment._id} onClick={() => handleCommentReply(comment._id,replyText)}/>                      
+                        }
+                        </div>
                         </div>
                         ))
                         } </>)}
