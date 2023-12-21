@@ -12,6 +12,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { format } from "date-fns";
+import SendIcon from '@mui/icons-material/Send';
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -116,6 +117,27 @@ export default function SinglePost({params}) {
         setReplyText(replyText);
     }
 
+    const handleSaveReply = async (commentId) => {
+        try {
+            const res = await fetch(`http://localhost:3001/blogs/${params.id}/comments/${commentId}/replies`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ author: userData.name, text: replyText, userId: userData.userId })
+            });
+
+            if (res.ok) {
+                fetchPost(params.id);
+                setReplyCommentId(null);
+                setReplyText("");
+            } else {
+                console.error('Failed to post reply');
+            }
+        } catch (error) {
+            console.error('Error posting reply', error);
+        }
+    };
 
     return (
         <div className="p-6 max-w-screen-lg mx-auto">
@@ -188,16 +210,29 @@ export default function SinglePost({params}) {
                         </>
                         ) : (
                         <span className="text-black text-xl m-2">{comment.text}</span>
-                        )}
+                        )
+                        }
+                        {comment.replies.map(reply => {
+                            return (<>
+                            <div>
+                        {reply.author} :
+                        {reply.text}
+                        </div>
+                        </>)
+                        })
+                        }
                         {
                          commentReply && replyCommentId === comment._id && (
+                            <div>
                             <input 
                             type="text"
                             value={replyText}
                             variant="standard"
                             onChange={(e) => setReplyText(e.target.value)}
                             className="w-80 ml-16 pt-2 mt-2"/>
-                         )
+                            <SendIcon className="m-2 mb-1 bg-yellow-300 p-1"
+                            onClick={() => handleSaveReply(comment._id)}/>
+                            </div> )
                         }
                         </li>
                         <div className="flex items-center">
