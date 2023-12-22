@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 const Login = () => {
-const [ userId , setUserId ] = useState(null);
 const [ name, setName ] =useState();
 const [email,setEmail]=useState();
 const [password,setPassword]=useState();
@@ -22,7 +21,10 @@ const [editedPost, setEditedPost] = useState({
 const [ modal, setModal] = useState(false)
 const dispatch = useDispatch();
 const isAuthenticated = useSelector((state) => state.isAuthenticated)
+const userData = useSelector((state) => state.userData)
 const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
+const userId = userData ? userData.userId : null;
+
 
 
 const handleRegisterClick= () => {
@@ -56,7 +58,6 @@ const handleLogin = async (e) => {
     password,
   });
   const userData   = response.data;
-
   dispatch({ type: 'LOGIN', payload: userData})
 
   setEmail("")

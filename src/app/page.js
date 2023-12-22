@@ -1,10 +1,16 @@
 'use client'
-import { TextField } from '@mui/material'
+import React from 'react';
+import dynamic from 'next/dynamic';
+import { TableCell, TextField } from '@mui/material'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import  axios  from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
 
 export default function Home() {
   
@@ -15,6 +21,7 @@ export default function Home() {
   const [showTags, setShowTags] = useState(false)
   const [postTopics, setPostTopics] = useState('') 
   const [matchingTags, setMatchingTags] = useState([])
+  const [image, setImage] = useState(null);
   const isAuthenticated = useSelector((state) => state.isAuthenticated)
   const dispatch = useDispatch();
   const router = useRouter();
@@ -22,6 +29,26 @@ export default function Home() {
 
   const availableTags = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Java', 'C#', 'PHP'];
 
+ 
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await axios.post('http://localhost:3001/blogs', formData)
+    const imageUrl = response.data.imageUrl;
+
+    const editor = document.querySelector('#ckeditor');
+    const ckEditorInstance = editor && ClassicEditor.instances.get(editor);
+    ckEditorInstance.model.change((writer) => {
+      const imageElement = writer.createElement('image', {
+        src: imageUrl,
+        alt: 'Uploaded image'
+      });
+      ckEditorInstance.model.insertContent(imageElement);
+    })
+  }
+
+  
   const handleTagInputChange = (e) => {
     const inputText = e.target.value.toLowerCase();
     const matchingTags = availableTags.filter((tag) =>
@@ -260,8 +287,8 @@ const showTagsHandler = () => {
           }
           
 
-          <div className='pt-4'>
-          <TextField
+           <div className='pt-4'>
+          {/* <TextField
           id="outlined-textarea"
           label="Create a post"
           placeholder="Create a post"
@@ -269,7 +296,20 @@ const showTagsHandler = () => {
           multiline
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
-          style={{ width: '800px'}}
+        /> */}
+                        <CKEditor
+                    editor={ ClassicEditor }
+                    data={postContent}
+                    onChange={ ( event,editor ) => {
+                        const data = editor.getData();
+                        setPostContent(data)
+                        console.log( data);
+                        }}
+                />
+                    <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleImageUpload(e.target.files[0])}
         />
         </div>
         

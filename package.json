@@ -9,16 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^40.2.0",
+    "@ckeditor/ckeditor5-react": "^6.2.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.18",
     "axios": "^1.6.2",
+    "ckeditor5": "^40.2.0",
+    "ckeditor5-custom-build": "^0.0.6",
     "date-fns": "^3.0.4",
     "framer-motion": "^10.16.14",
     "next": "^14.0.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-redux": "^9.0.4",
     "redux": "^5.0.0"
   },

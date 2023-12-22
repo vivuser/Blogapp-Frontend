@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
 import { format } from "date-fns";
 import SendIcon from '@mui/icons-material/Send';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -25,6 +26,8 @@ export default function SinglePost({params}) {
     const [ commentReply, SetCommentReply ] = useState({});
     const [ replyCommentId, setReplyCommentId] = useState(null)
     const [ replyText, setReplyText ] = useState('')
+    const [ showMoreComments, setShowMoreComments ] = useState({});
+    const [showEditComment, setShowEditComment] = useState(false)
     const isAuthenticated = useSelector((state) => state.isAuthenticated);
     const userData = useSelector((state) => state.userData) 
     const dispatch = useDispatch();
@@ -34,7 +37,7 @@ export default function SinglePost({params}) {
     const { userName } = useUser(); 
 
     const handleOpenDrawer = () => {
-        setIsDrawerOpen(true)
+        setIsDrawerOpen((prev) => !prev)
     }
 
     const handleCloseDrawer = () => {
@@ -85,6 +88,7 @@ export default function SinglePost({params}) {
         {console.log(post, 'poast')}
 
         const handleEditComment = (commentId,commentText) => {
+            setShowEditComment((prev) => !prev)
             setEditedCommentId(commentId);
             setEditedCommentText(commentText);
         }
@@ -112,7 +116,7 @@ export default function SinglePost({params}) {
     };
 
     const handleCommentReply = (replyCommentId, replyText) => {
-        SetCommentReply(true);
+        SetCommentReply((prev) => !prev);
         setReplyCommentId(replyCommentId);
         setReplyText(replyText);
     }
@@ -138,6 +142,16 @@ export default function SinglePost({params}) {
             console.error('Error posting reply', error);
         }
     };
+
+    const handleShowMore = (commentId) => {
+        setShowMoreComments((prev) => {
+            return { ...prev, [commentId]: !prev[commentId]}
+        })
+    }
+
+    const handleCloseCommentField = () => {
+        SetCommentReply(false)
+    }
 
     return (
         <div className="p-6 max-w-screen-lg mx-auto">
@@ -194,8 +208,8 @@ export default function SinglePost({params}) {
                     <ul>
                         {post && post.length >0 && (<>
                         {(post[0].comment)?.map((comment) => (
-                        <div className="flex justify-between m-4">
-                        <li key={comment._id} className="text-md text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:
+                        <div className="flex justify-between m-4 bg-white p-1">
+                        <li key={comment._id} className="text-lg text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:
                         {editedCommentId === comment._id ? (
                         <>
                         <input
@@ -204,35 +218,48 @@ export default function SinglePost({params}) {
                         onChange={(e) => setEditedCommentText(e.target.value)}
                         className="text-black text-xl m-2 w-80"
                         />
-                        <button onClick={() => handleSaveEditComment(comment._id)} className="bg-yellow-500 px-2 p-1 rounded-md hover:bg-yellow-400">
+                        <button onClick={() => handleSaveEditComment(comment._id)} className="bg-yellow-500 px-2 rounded-md hover:bg-yellow-400 text-sm font-bold">
                             Save
                         </button>
+                        <CancelIcon onClick={handleEditComment}/>
                         </>
                         ) : (
                         <span className="text-black text-xl m-2">{comment.text}</span>
                         )
+                        }{ comment.replies.length >0 &&
+                        <div className="flex ml-10">
+                        <h4 className="italic pr-1">{comment.replies[0]?.author}:</h4>
+                        <h4 className="text-black italic">{comment.replies[0]?.text}</h4>
+                        </div>
                         }
-                        {comment.replies.map(reply => {
+                        {!showMoreComments[comment._id] && comment.replies.length>0 ?
+                        <button className="underline underline-offset-1 ml-10" key={comment._id} onClick={() => handleShowMore(comment._id)}>more replies</button>:
+                        (comment.replies.length>0 && <button className="underline underline-offset-1 ml-10" key={comment._id} onClick={() => handleShowMore(comment._id)}>hide replies</button>
+                        )}
+                        {showMoreComments[comment._id] &&   (comment.replies.slice(1).map(reply => {
                             return (<>
-                            <div>
-                        {reply.author} :
-                        {reply.text}
+                            <div className="flex ml-10">
+                        <h4 className="italic pr-1">{reply.author}:</h4>
+                        <span className="text-black italic">{reply.text}</span>
                         </div>
                         </>)
                         })
-                        }
+                        )}
                         {
-                         commentReply && replyCommentId === comment._id && (
+                         commentReply && replyCommentId === comment._id && (<>
                             <div>
                             <input 
                             type="text"
                             value={replyText}
                             variant="standard"
                             onChange={(e) => setReplyText(e.target.value)}
-                            className="w-80 ml-16 pt-2 mt-2"/>
-                            <SendIcon className="m-2 mb-1 bg-yellow-300 p-1"
+                            className="w-80"/>
+                            <SendIcon className="bg-yellow-300 p-1 hover:bg-yellow-400"
                             onClick={() => handleSaveReply(comment._id)}/>
-                            </div> )
+                            <CancelIcon className="text-black m-2" onClick={handleCloseCommentField}/>
+                            </div> 
+
+                            </>)
                         }
                         </li>
                         <div className="flex items-center">
@@ -241,6 +268,7 @@ export default function SinglePost({params}) {
                         <EditNoteIcon onClick={() => handleEditComment(comment._id, comment.text)} className="text-slate-400 hover:text-slate-600"/> : <MapsUgcOutlinedIcon
                         className="text-slate-400 hover:text-slate-600" key={comment._id} onClick={() => handleCommentReply(comment._id,replyText)}/>                      
                         }
+
                         </div>
                         </div>
                         ))
