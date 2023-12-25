@@ -281,6 +281,11 @@ export default function SinglePost({params}) {
                 <div className="border-t border-gray-200"></div>
                 </div>
             <article className="flex items-center justify-center m-8">
+                <div>
+                    {post[0].imageUrl &&
+            <img src={post[0].imageUrl} alt="Your Image" />
+                    }
+            </div>
                 <p className="text-lg flex items-center justify-center text-gray-600">{post[0].content}</p>
             </article>
             </>)}
