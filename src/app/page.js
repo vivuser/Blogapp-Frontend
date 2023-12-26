@@ -23,6 +23,7 @@
     const [postTopics, setPostTopics] = useState('') 
     const [matchingTags, setMatchingTags] = useState([])
     const [imageUrl, setImageUrl] = useState(null);
+    const [ postViews, setPostViews] = useState([])
     const isAuthenticated = useSelector((state) => state.isAuthenticated)
     const dispatch = useDispatch();
     const router = useRouter();
@@ -30,9 +31,31 @@
 
     const availableTags = ['JavaScript', 'HTML', 'CSS', 'React', 'Node.js', 'Python', 'Java', 'C#', 'PHP'];
 
+    useEffect(() => {
+      const fetchBlogPosts = async () => {
+        try {
+          const response = await axios.get('http://localhost:3001/blogs/');
+          const blogPosts = response.data;
+          console.log(blogPosts);
+
+          setPostViews(blogPosts);
+        } catch (error) {
+          console.error('Error fetching blogs posts:', error)
+        }
+      };
+      fetchBlogPosts();
+    }, [postViews]);
+
+    console.log(postViews, 'jjjj')
+
+    const allSortedPosts = postViews.slice().sort((a,b) => b.views - a.views);
+    const sortedPosts = allSortedPosts.splice(0,4);
+    console.log(sortedPosts, 'sortedposts')
+
+
   
     const handleImageUpload = async (file) => {
-      try {
+      try { 
       const formData = new FormData();
       formData.append('file', file);
 
@@ -151,9 +174,25 @@
             <div className='font-bold m-4 my-6 mx-16'>
             <div className=''>
 
+            <div className='flex'>
             <div className='flex my-10'>
             <TimelineIcon className='bg-gray-200 h-12 w-12 mx-2 rounded-full shadow-lg'/>
             <h1 className='text-xl'>Most read this month...</h1>
+            <div className='flex flex-row'>
+            <ul className='flex space-x-4'>
+              {sortedPosts.map((post) => (
+                <li key={post?._id} className='flex flex-col'>
+                    <h2>{post?.title}</h2>
+                    <div>
+                      <Image src={post?.imageUrl} alt={post.title} width={400} height={400}/>
+                    </div>
+                    <p>{post.content.split(0,100)}</p>
+                    <p>Views: {post?.views}</p>
+                </li>
+              ))}
+            </ul>
+            </div>
+            </div>
             </div>
 
             <div className='h-40'>
@@ -304,3 +343,5 @@
           </div>
     )
   }
+
+ 

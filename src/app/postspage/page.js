@@ -1,11 +1,13 @@
-
 import Link from "next/link";
 import { format } from 'date-fns';
+import axios from "axios";
 
 export default async function Postpage() {
 
-  const res = await fetch('http://localhost:3001/blogs');
-  const posts = await res.json();
+
+  const res = await axios('http://localhost:3001/blogs')
+  const posts = res.data
+  console.log(res, 'jjj')
 
   return (
     <>

@@ -14,6 +14,9 @@ import { useRouter } from 'next/navigation';
 import { format } from "date-fns";
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
+import Image from "next/image";
+import axios from "axios";
+
 
 export default function SinglePost({params}) { 
     const [post, setPost] = useState(null);
@@ -50,8 +53,19 @@ export default function SinglePost({params}) {
         post && setPost(post);
     }
 
+    const incrementViews = async () => {
+        try {
+            await axios.post(`http://localhost:3001/blogs/${params.id}/increment-views`)
+        } catch (error) {
+            console.error('Error incrementing views', error)
+            console.log(params.id, 'paramsId')
+
+        }
+    }
+
     useEffect(() => {
         fetchPost(params.id);
+        incrementViews();
     }, [])
 
     const handleComment = async () => {
@@ -167,6 +181,7 @@ export default function SinglePost({params}) {
                 <h3>Date: 
                 <span className="underline underine-offset-2 p-2 text-yellow-600 font-bold text-lg">{format(new Date(post[0].createdAt), 'MMMM dd, yyyy')}</span></h3>
                 <button onClick={handleOpenDrawer}><MapsUgcOutlinedIcon/></button>
+              
                 <Drawer
                 anchor="right"
                 open={isDrawerOpen}
@@ -180,7 +195,7 @@ export default function SinglePost({params}) {
                     onClick={handleShowCommentPad}>
                         {showCommentPad ?<CommentsDisabledIcon/> : <CommentIcon/>}</button>
                     </div>
-
+            
 
                    {showCommentPad &&
                     <div className="flex mt-4">
@@ -282,12 +297,11 @@ export default function SinglePost({params}) {
                 </div>
             <article className="flex items-center justify-center m-8">
                 <div>
-                    {post[0].imageUrl &&
-            <img src={post[0].imageUrl} alt="Your Image" />
-                    }
-            </div>
+                <Image src={post[0].imageUrl} alt="Base64 Image" height={500} width={500}/>
+                </div>
                 <p className="text-lg flex items-center justify-center text-gray-600">{post[0].content}</p>
             </article>
+
             </>)}
 
 
