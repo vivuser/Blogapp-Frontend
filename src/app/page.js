@@ -44,9 +44,9 @@
         }
       };
       fetchBlogPosts();
-    }, [postViews]);
+    }, []);
 
-    console.log(postViews, 'jjjj')
+    console.log(postViews, 'jjjj')  
 
     const allSortedPosts = postViews.slice().sort((a,b) => b.views - a.views);
     const sortedPosts = allSortedPosts.splice(0,4);
@@ -56,7 +56,7 @@
   
     const handleImageUpload = async (file) => {
       try { 
-      const formData = new FormData();
+      const formData = new FormData();  
       formData.append('file', file);
 
       const response = await axios.post('http://localhost:3001/blogs/image', formData)

@@ -1,0 +1,11 @@
+.ql-container .ql-editor::before {
+    content: attr(data-placeholder);
+    font-size: 20px; 
+    color: #757575;
+  }
+  
+
+  .ql-container .ql-editor {
+    font-size: 20px; /* Adjust the text size as needed */
+    color: #333; /* Adjust the text color as needed */
+  }
