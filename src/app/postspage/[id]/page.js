@@ -299,7 +299,9 @@ export default function SinglePost({params}) {
                 <div>
                 <Image src={post[0].imageUrl} alt="Base64 Image" height={500} width={500}/>
                 </div>
-                <p className="text-lg flex items-center justify-center text-gray-600">{post[0].content}</p>
+                <div className="text-lg flex items-center justify-center text-gray-600">
+                    <div dangerouslySetInnerHTML={{__html: post[0].content}} />
+                    </div>
             </article>
 
             </>)}
