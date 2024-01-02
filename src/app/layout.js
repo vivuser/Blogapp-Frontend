@@ -2,8 +2,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from './header/page'
 import { Nunito } from 'next/font/google'
-import { UserProvider } from '../../context/UserContext'
-import { Providers } from '../../providers'
+import { Providers } from './redux/providers'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,13 +18,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <Providers>
-    <UserProvider >
     <html lang="en">
       <body className={font.className}>
         <Header/>
         {children}</body>
     </html>
-     </UserProvider>
-     </Providers>
+    </Providers>
   )
 }

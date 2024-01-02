@@ -1,18 +1,20 @@
 'use client'
 import Link from "next/link"
-import { useUser } from "../../../context/UserContext"
 import { useDispatch, useSelector } from "react-redux";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { type } from "os";
 import { Logout } from "@mui/icons-material";
+import { logout } from "../redux/authSlice";
 
 const Header = () => {
-    const userData = useSelector(state => state.userData);
+    const userData = useSelector(state => state.auth.userData);
     const dispatch = useDispatch()
+
+    console.log(userData, 'reduxUserData')
 
     const handleLogout = () => {
 
-    console.log(dispatch ({ type: 'LOGOUT'}))
+    console.log(dispatch(logout()))
     }
 
 

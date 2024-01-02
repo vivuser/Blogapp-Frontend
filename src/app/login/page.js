@@ -2,8 +2,8 @@
 import { TextField } from "@mui/material";
 import  axios  from "axios";
 import { useEffect, useState } from "react";
-import { useUser } from "../../../context/UserContext";
 import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/authSlice";
 
 
 const Login = () => {
@@ -20,7 +20,7 @@ const [editedPost, setEditedPost] = useState({
 })
 const [ modal, setModal] = useState(false)
 const dispatch = useDispatch();
-const isAuthenticated = useSelector((state) => state.isAuthenticated)
+const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 const userData = useSelector((state) => state.userData)
 const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
 const userId = userData ? userData.userId : null;
@@ -58,7 +58,7 @@ const handleLogin = async (e) => {
     password,
   });
   const userData   = response.data;
-  dispatch({ type: 'LOGIN', payload: userData})
+  dispatch(login(userData))
 
   setEmail("")
   setPassword("")

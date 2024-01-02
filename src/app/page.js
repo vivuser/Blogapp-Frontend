@@ -24,7 +24,7 @@
     const [matchingTags, setMatchingTags] = useState([])
     const [imageUrl, setImageUrl] = useState(null);
     const [ postViews, setPostViews] = useState([])
-    const isAuthenticated = useSelector((state) => state.isAuthenticated)
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
     const dispatch = useDispatch();
     const router = useRouter();
     const userData = useSelector((state) => state.userData);
