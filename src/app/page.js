@@ -176,14 +176,16 @@
 
             <div className='flex'>
             <div className='flex flex-col my-10'>
-            <h1 className='text-xl'><span className='mx-3'><TimelineIcon className='bg-gray-200 h-12 w-12 mx-2 rounded-full shadow-lg'/></span>Most read this month...</h1>
+            <h1 className='text-xl'><span className='mx-3'><TimelineIcon className='outline p-1 h-12 w-12 mx-2 rounded-full shadow-lg'/></span>Most read this month...</h1>
             <div className='flex flex-row'>
             <ul className='flex space-x-4 gap-8 p-4'>
               {sortedPosts.map((post) => (
                 <li key={post?._id} className='flex flex-col shadow-lg p-4 pt-6'>
+                  {post?.imageUrl &&
                     <div className='m-4'>
                       <Image src={post?.imageUrl} alt={post.title} width={200} height={200}/>
                     </div>
+  }
                     <h2>{post?.title}</h2>
                     {/* <p>Views: {post?.views}</p> */}
                 </li>

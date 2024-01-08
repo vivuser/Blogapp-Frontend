@@ -30,8 +30,8 @@ export default function SinglePost({params}) {
     const [ replyText, setReplyText ] = useState('')
     const [ showMoreComments, setShowMoreComments ] = useState({});
     const [showEditComment, setShowEditComment] = useState(false)
-    const isAuthenticated = useSelector((state) => state.isAuthenticated);
-    const userData = useSelector((state) => state.userData) 
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const userData = useSelector((state) => state.auth.userData) 
     const dispatch = useDispatch();
 
     const router = useRouter();
@@ -295,12 +295,17 @@ export default function SinglePost({params}) {
                 <div className="border-t border-gray-200"></div>
                 </div>
             <article className="flex items-center justify-center m-8">
+                {post[0].imageUrl && (<>
                 <div>
                 <Image src={post[0].imageUrl} alt="Base64 Image" height={500} width={500}/>
                 </div>
+                </>)
+                }
                 <div className="text-lg flex items-center justify-center text-gray-600">
-                    <div dangerouslySetInnerHTML={{__html: post[0].content}} />
-                    </div>
+                <div dangerouslySetInnerHTML={{__html: post[0].content}} />
+                </div>
+             
+
             </article>
 
             </>)}

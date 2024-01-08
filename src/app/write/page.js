@@ -13,9 +13,10 @@ const Write = () => {
     const [open, setOpen] = useState(false);
     const [postContent, setPostContent] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
-    const [title, setTitle] =useState("")
+    const [title, setTitle] =useState('')
+    const [postTopics, setPostTopics] = useState('')
     const dispatch = useDispatch()
-    const userData = useSelector((state) => state.userData);
+    const userData = useSelector((state) => state.auth.userData);
 
     const userId = JSON.parse(localStorage.getItem('userData'))?.userId
 
@@ -57,9 +58,9 @@ const Write = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              title, 
+              title: title, 
               content: postContent,
-            //   tags :postTopics,
+              tags :postTopics,
               userId: userId,
               author: userData.name,
               imageUrl: imageUrl
@@ -71,10 +72,12 @@ const Write = () => {
   
             setTitle('')
             setPostContent('')
+            setImageUrl('')
           } else {
             console.error('Failed to create the post');
           }
         } catch (error) { 
+          console.log(userData.name)
           console.error('Error submitting post:', error)
         }
     }
@@ -82,19 +85,24 @@ const Write = () => {
 
     return (
         <div className='max-w-3xl mx-auto flex flex-col'>   
+
             <input type="text" placeholder="Title" className='mt-10 text-3xl border-none outline-none'
             onChange={(e) => setTitle(e.target.value)}/> 
+            <input type="text" placeholder='Give your post a tag' className='outline-none p-2 text-yellow-900'
+            onChange={(e) => setPostTopics(e.target.value)}/>
+            
             <div className='flex items-start mt-4'>
                 <button className='float-left' onClick={handleOpenAttachment}><ControlPointIcon/></button>
-            </div>  
-            { open && (
-                <div className='fex flex-row bg-slate-200 mx-auto shadow-md border rounded-full'>
+                { open && (
+                <div className='outline mx-4 shadow-md border text-slate-500'>
                     <label className='m-2 p-1 hover:bg-white rounded-md'>
                         <input type='file' accept='image/*' onChange={handleImageUpload} style={{ display: 'none' }}/>
                         <AddPhotoAlternateIcon/>
                     </label>
                 </div>)
             }
+            </div>  
+
 
         {imageUrl && <img src={imageUrl} alt="Uploaded" className="mt-2 max-w-full h-auto" height={100} width={100}/>}
 
@@ -109,7 +117,7 @@ const Write = () => {
 
             <button 
             onClick={handleSubmit}
-            className='bg-yellow-300 rounded-full px-3 py-2 mx-auto hover:bg-yellow-400'>
+            className='bg-yellow-300 rounded-full px-3 py-2 mx-auto hover:bg-yellow-400 font-bold text-slate-800'>
                 Publish
             </button>
         </div>  

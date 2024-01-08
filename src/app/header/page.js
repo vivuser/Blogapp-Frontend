@@ -6,6 +6,7 @@ import { type } from "os";
 import { Logout } from "@mui/icons-material";
 import { logout } from "../redux/authSlice";
 
+
 const Header = () => {
     const userData = useSelector(state => state.auth.userData);
     const dispatch = useDispatch()
@@ -34,7 +35,9 @@ const Header = () => {
             <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/login">Login</Link></li>       
             )
          }
-            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/write">Write</Link></li>       
+            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2 "><Link href="/write">
+            Write
+            </Link></li>       
 
             </ul>
             {userData ?

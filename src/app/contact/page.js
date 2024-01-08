@@ -1,6 +1,11 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 
+export const metadata = {
+  title: "blogify contact page",
+  description: 'blogify contact page',
+}
+
 const ContactForm = () => {
   return (
     <div className="flex flex-col p-4 items-center">
