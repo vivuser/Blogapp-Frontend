@@ -4,6 +4,7 @@ import  axios  from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 
 const Login = () => {
@@ -24,6 +25,29 @@ const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
 const userData = useSelector((state) => state.userData)
 const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
 const userId = userData ? userData.userId : null;
+
+useEffect(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
+
+  if (code) {
+    handleGitHubCallBack(code);
+  }
+}, []);
+
+const handleGitHubCallBack = async (code) => {
+  try {
+
+    const response = await axios.post('http://localhost:3001/auth/auth/github/callback', { code });
+
+    const userData = response.data;
+    dispatch(login(userData));
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 
 
@@ -262,12 +286,16 @@ const handleSaveEdit = async () => {
           Submit
         </button>
         ) :
-        (
+        (<>
           <button className="bg-yellow-300 flex mx-auto p-2 rounded-md hover:bg-yellow-400"
           onClick={handleLogin}>
             Submit
           </button>
-        )
+          Or Login using
+          <button onClick={() => window.location.href = 'http://localhost:3000/auth/github/callback'}>
+          <GitHubIcon className="mx-2"/>
+          </button>
+          </>)
 }
         <br/>
         <br/>

@@ -37,16 +37,12 @@ const Write = () => {
             const response = await axios.post('http://localhost:3001/blogs/image', formData);
             const uploadedImageUrl = response.data.imageUrl;
             setImageUrl(uploadedImageUrl);
-
-            // setValue((prevValue) => ( 
-            //     prevValue.substring(0, value.length) + 
-            //     `\n![Alt text](${uploadedImageUrl})\n`  +
-            //     prevValue.substring(value.length)
-            // ));
         } catch (error) {
             console.error('Error uploading image:', error);
         }
     }
+
+
     
     const handleSubmit = async () => {
 
