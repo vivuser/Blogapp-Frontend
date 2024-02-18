@@ -5,7 +5,7 @@ const storedUserData = typeof window !== 'undefined' ? localStorage.getItem('use
 
 const initialState = {
     isAuthenticated: storedUserData !== null,
-    userData: storedUserData || null,
+    userData: storedUserData ? JSON.parse(storedUserData) : null,
 };
 
 const authSlice = createSlice({

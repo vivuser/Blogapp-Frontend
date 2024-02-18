@@ -7,6 +7,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import './write.css';
 import axios from 'axios';
 import { useDispatch, useSelector} from 'react-redux';
+import { openSnackbar } from '../redux/commonSlice';
 
 
 const Write = () => {
@@ -47,7 +48,6 @@ const Write = () => {
     const handleSubmit = async () => {
 
         try {
-  
           const response = await fetch('http://localhost:3001/blogs', {
             method: 'POST',
             headers: {
@@ -65,12 +65,27 @@ const Write = () => {
   
           if (response.ok) {
             console.log('Post created successfully');
+            dispatch(
+                openSnackbar({
+                    color: 'success',
+                    icon: 'check',
+                    content: 'Project created successfully',
+                })
+            )
+            
   
             setTitle('')
             setPostContent('')
             setImageUrl('')
           } else {
             console.error('Failed to create the post');
+            dispatch(
+                openSnackbar({
+                    color: 'error',
+                    icon: 'warning',
+                    content: 'Failed to create the post',
+                })
+            )
           }
         } catch (error) { 
           console.log(userData.name)
@@ -113,7 +128,8 @@ const Write = () => {
 
             <button 
             onClick={handleSubmit}
-            className='bg-yellow-300 rounded-full px-3 py-2 mx-auto hover:bg-yellow-400 font-bold text-slate-800'>
+            className={`bg-${title.length ? 'yellow-300' : 'yellow-100'} rounded-full px-3 py-2 mx-auto
+                     hover:bg-yellow-400 font-bold text-slate-800`}>
                 Publish
             </button>
         </div>  

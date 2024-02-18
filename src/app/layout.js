@@ -20,13 +20,15 @@ export const metadata = {
 
 
 export default function RootLayout({ children }) {
+
+  
   return (
     <Providers>
     <html lang="en">
       <body className={font.className}>
         <Header/>
         <PageLoader>
-        {children}
+          {children}
         </PageLoader>
         </body>
     </html>

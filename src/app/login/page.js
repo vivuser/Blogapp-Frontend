@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
 import GitHubIcon from '@mui/icons-material/GitHub';
-
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 const Login = () => {
 const [ name, setName ] =useState();
@@ -26,9 +26,15 @@ const userData = useSelector((state) => state.userData)
 const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
 const userId = userData ? userData.userId : null;
 
+
+const GitHubCallbackComponent = () => {
+  const dispatch = useDispatch()  
+
+
 useEffect(() => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
+  console.log(code, 'ye rha code')
 
   if (code) {
     handleGitHubCallBack(code);
@@ -37,10 +43,11 @@ useEffect(() => {
 
 const handleGitHubCallBack = async (code) => {
   try {
-
-    const response = await axios.post('http://localhost:3001/auth/auth/github/callback', { code });
+    console.log('koshish krta hun')
+    const response = await axios.post('http://localhost:3000/auth/github/callback', { code });
 
     const userData = response.data;
+    console.log(userData, 'userdata puchta hun')
     dispatch(login(userData));
 
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -48,7 +55,7 @@ const handleGitHubCallBack = async (code) => {
     console.error(error);
   }
 }
-
+}
 
 
 const handleRegisterClick= () => {
@@ -292,10 +299,12 @@ const handleSaveEdit = async () => {
             Submit
           </button>
           Or Login using
-          <button onClick={() => window.location.href = 'http://localhost:3000/auth/github/callback'}>
+          <button onClick={() => window.location.href = 'http://localhost:3001/auth/auth/github/callback'}>
           <GitHubIcon className="mx-2"/>
           </button>
-          </>)
+          </>
+          
+          )
 }
         <br/>
         <br/>
@@ -305,6 +314,8 @@ const handleSaveEdit = async () => {
         onClick={handleRegisterClick}>{register ? 'Login' : 'Register'}</button>
         </div>
        </div>
+
+       
 
     )
 }

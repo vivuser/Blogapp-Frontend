@@ -11,7 +11,7 @@ const Header = () => {
     const userData = useSelector(state => state.auth.userData);
     const dispatch = useDispatch()
 
-    console.log(userData, 'reduxUserData')
+    console.log(userData,userData.name, 'reduxUserData')
 
     const handleLogout = () => {
 
@@ -28,14 +28,17 @@ const Header = () => {
             <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/">Home</Link></li>       
             {userData ? 
             (
-            <li className="p-2 px-4 bg-yellow-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/login">{userData.name}</Link></li>       
+            <li className="p-2 px-4 bg-yellow-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2">
+                <Link href="/login">{userData.name}</Link></li>       
             )
             :
             (
-            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2"><Link href="/login">Login</Link></li>       
+            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2">
+                <Link href="/login">Login</Link></li>       
             )
          }
-            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2 "><Link href="/write">
+            <li className="p-2 px-4 bg-slate-200 rounded-lg text-md font-bold hover:bg-cyan-100 m-2 ">
+                <Link href={userData ? "/write" : "/login"}>
             Write
             </Link></li>       
 
