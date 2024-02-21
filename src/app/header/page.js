@@ -11,7 +11,7 @@ const Header = () => {
     const userData = useSelector(state => state.auth.userData);
     const dispatch = useDispatch()
 
-    console.log(userData,userData.name, 'reduxUserData')
+    console.log(userData,userData?.name, 'reduxUserData')
 
     const handleLogout = () => {
 

@@ -1,28 +1,29 @@
+"use client"
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { openSnackbar, closeSnackbar } from '../redux/commonSlice';
 import Snackbar from '@mui/material/Snackbar';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function PositionedSnackbar() {
-  const [state, setState] = React.useState({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
-  const { vertical, horizontal, open } = state;
+export default function AutohideSnackbar() {
+  const dispatch = useDispatch();
+  const { isOpen, autoHideDuration, content } = useSelector((state) => state.common.snackbar)
 
-  const handleClose = () => {
-    setState({ ...state, open: false });
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    dispatch(closeSnackbar());
   };
 
   return (
+    <div>
       <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
+        open={isOpen}
+        autoHideDuration={autoHideDuration}
         onClose={handleClose}
-        message="I love snacks"
-        key={vertical + horizontal}
+        message={content}
       />
+    </div>
   );
 }

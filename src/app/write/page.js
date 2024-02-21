@@ -7,7 +7,8 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import './write.css';
 import axios from 'axios';
 import { useDispatch, useSelector} from 'react-redux';
-import { openSnackbar } from '../redux/commonSlice';
+import { openSnackbar, closeSnackbar } from '../redux/commonSlice';
+import AutohideSnackbar from '../components/Snackbar';
 
 
 const Write = () => {
@@ -65,27 +66,26 @@ const Write = () => {
   
           if (response.ok) {
             console.log('Post created successfully');
-            dispatch(
-                openSnackbar({
-                    color: 'success',
-                    icon: 'check',
-                    content: 'Project created successfully',
-                })
-            )
             
   
             setTitle('')
             setPostContent('')
             setImageUrl('')
+            dispatch(
+                openSnackbar({
+                content: 'Post created successfully',
+                color: 'success'
+            })
+            )
           } else {
             console.error('Failed to create the post');
             dispatch(
                 openSnackbar({
-                    color: 'error',
-                    icon: 'warning',
-                    content: 'Failed to create the post',
-                })
+                content: 'Error creating post',
+                color: 'error'
+            })
             )
+            dispatch(closeSnackbar());
           }
         } catch (error) { 
           console.log(userData.name)
@@ -96,6 +96,7 @@ const Write = () => {
 
     return (
         <div className='max-w-3xl mx-auto flex flex-col'>   
+        <AutohideSnackbar />
 
             <input type="text" placeholder="Title" className='mt-10 text-3xl border-none outline-none'
             onChange={(e) => setTitle(e.target.value)}/> 
