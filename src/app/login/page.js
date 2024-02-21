@@ -32,6 +32,7 @@ const GitHubCallbackComponent = () => {
 
 
 useEffect(() => {
+  console.log("useEffect is running");
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   console.log(code, 'ye rha code')
@@ -39,12 +40,12 @@ useEffect(() => {
   if (code) {
     handleGitHubCallBack(code);
   }
-}, []);
+}, [window.location.search]);
 
 const handleGitHubCallBack = async (code) => {
   try {
     console.log('koshish krta hun')
-    const response = await axios.post('http://localhost:3000/auth/github/callback', { code });
+    const response = await axios.post('http://localhost:3001/auth/auth/github/callback', { code });
 
     const userData = response.data;
     console.log(userData, 'userdata puchta hun')
