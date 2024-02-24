@@ -27,36 +27,36 @@ const [isLoggedin, setIsLoggedin] = useState(isAuthenticated)
 const userId = userData ? userData.userId : null;
 
 
-const GitHubCallbackComponent = () => {
-  const dispatch = useDispatch()  
+// const GitHubCallbackComponent = () => {
+//   const dispatch = useDispatch()  
 
 
-useEffect(() => {
-  console.log("useEffect is running");
-  const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
-  console.log(code, 'ye rha code')
+// useEffect(() => {
+//   console.log("useEffect is running");
+//   const urlParams = new URLSearchParams(window.location.search);
+//   const code = urlParams.get('code');
+//   console.log(code, 'ye rha code')
 
-  if (code) {
-    handleGitHubCallBack(code);
-  }
-}, [window.location.search]);
+//   if (code) {
+//     handleGitHubCallBack(code);
+//   }
+// }, [window.location.search]);
 
-const handleGitHubCallBack = async (code) => {
-  try {
-    console.log('koshish krta hun')
-    const response = await axios.post('http://localhost:3001/auth/auth/github/callback', { code });
+// const handleGitHubCallBack = async (code) => {
+//   try {
+//     console.log('koshish krta hun')
+//     const response = await axios.post('http://localhost:3001/auth/auth/github/callback', { code });
 
-    const userData = response.data;
-    console.log(userData, 'userdata puchta hun')
-    dispatch(login(userData));
+//     const userData = response.data;
+//     console.log(userData, 'userdata puchta hun')
+//     dispatch(login(userData));
 
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } catch (error) {
-    console.error(error);
-  }
-}
-}
+//     window.history.replaceState({}, document.title, window.location.pathname);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+// }
 
 
 const handleRegisterClick= () => {
@@ -300,7 +300,7 @@ const handleSaveEdit = async () => {
             Submit
           </button>
           Or Login using
-          <button onClick={() => window.location.href = 'http://localhost:3001/auth/auth/github/callback'}>
+          <button onClick={() => window.location.href = 'http://localhost:3001/auth/github/'}>
           <GitHubIcon className="mx-2"/>
           </button>
           </>
