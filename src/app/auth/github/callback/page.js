@@ -35,7 +35,7 @@ const handleGitHubCallBack = async (code) => {
 
   return (
   <div>
-    Redirecting to github...
+    Redirecting ...
   </div>);
 };
 
