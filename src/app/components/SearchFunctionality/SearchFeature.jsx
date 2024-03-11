@@ -1,17 +1,36 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import BasicTextFields from './TextSearch'
-import axios from 'axios';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 
-const SearchFeature = () => {
+export default function Search() {
+  const searchParams = useSearchParams();
+  const usePath = usePathname();
+  const { replace } = useRouter();
+  const [term, setTerm] = useState("")
 
+  function handleSearch(){
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set('query', term);
+    } else {
+      params.delete('query');
+    }
+    replace (`${usePath}?${params.toString()}`);
+  }
 
   return (
-    <div>
-      <BasicTextFields label="Search blogs" />
-    </div>
+      <input className='bg-green-100 p-4 m-2'
+      placeholder='Search Blogs'
+      onChange={(e) => {
+      setTerm(e.target.value);
+      handleSearch();
+      }}
+      defaultValue={searchParams.get('query')?.toString()}
+      >
+      </input>
   )
 }
 
-export default SearchFeature
+
+

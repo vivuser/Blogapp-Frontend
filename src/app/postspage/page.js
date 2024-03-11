@@ -3,11 +3,16 @@ import { format } from 'date-fns';
 import axios from "axios";
 import BasicTextFields from "../components/SearchFunctionality/TextSearch";
 import SearchFeature from "../components/SearchFunctionality/SearchFeature";
+import Search from "../components/SearchFunctionality/SearchFeature";
+import { Suspense } from "react";
 
-export default async function Postpage() {
+export default async function Postpage({searchParams}) {
 
-
-  const res = await axios('http://localhost:3001/blogs')
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page || 1) 
+  const res = await axios('http://localhost:3001/blogs', {
+    params: query,
+  })
   const posts = res.data
   console.log(res, 'jjj')
 
@@ -16,7 +21,7 @@ export default async function Postpage() {
       <div>
         <h1 className="flex justify-center items-center text-2xl m-4 font-bold">Featured</h1>
       </div>
-      <SearchFeature />
+      <Search />
       <div className="max-w-screen-2xl mx-auto flex flex-wrap">
         {posts?.map(post => (
           <div key={post?._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4"> 
