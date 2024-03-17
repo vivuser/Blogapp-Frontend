@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const InfiniteScrollPagination = ({ apiUrl }) => {
@@ -8,24 +8,49 @@ const InfiniteScrollPagination = ({ apiUrl }) => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState([])
+    const [data, setData ] = useState([])
 
-    const fetchMoreData = async () => {
-        if (loading || !hasMore) return;
-
+    useEffect(() => {
+        const fetchData =  async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiUrl}?page=${page}`);
+            console.log(Inside,  'inside')
+            const response = await axios.get(`${apiUrl}?.page=${page}`);
+            console.log(response, 'response')
             const newData = response.data;
-
-            setData((prevData) => [...prevData, ...newData]);
-            setPage((prevPage) => prevPage + 1);
+            setData(prevData => [...prevData, ...newData]);
             setHasMore(newData.length > 0);
         } catch (error) {
             console.error('Error fetching more data', error);
         } finally {
             setLoading(false);
         }
+        
+        if (page !== 1) {
+            fetchData();
+        }
     }
+    }, [])
+
+    console.log(data,' jjj')
+
+    // const fetchMoreData = async () => {
+    //     if (loading || !hasMore) return;
+
+    //     try {
+    //         setLoading(true);
+    //         const response = await axios.get(`${apiUrl}?page=${page}`);
+    //         const newData = response.data;
+
+    //         setData((prevData) => [...prevData, ...newData]);
+    //         setPage((prevPage) => prevPage + 1);
+    //         setHasMore(newData.length > 0);
+    //     } catch (error) {
+    //         console.error('Error fetching more data', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
 
     useEffect(() => {
         const handleScroll = () => {

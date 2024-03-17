@@ -18,7 +18,7 @@ export default function BasicCard() {
         const blogPosts = response.data;
         console.log(blogPosts);
 
-        setPostViews(blogPosts);
+        setPostViews([blogPosts]  );
       } catch (error) {
         console.error('Error fetching blogs posts:', error)
       }
@@ -26,7 +26,7 @@ export default function BasicCard() {
     fetchBlogPosts();
   }, []);
 
-  const allSortedPosts = postViews.slice().sort((a,b) => b.views - a.views);
+  const allSortedPosts = postViews?.slice().sort((a,b) => b.views - a.views);
   const sortedPosts = allSortedPosts.splice(0,4);
   console.log(sortedPosts, 'sortedposts')
 
