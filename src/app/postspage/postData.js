@@ -1,6 +1,6 @@
 "use client"
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "next/link";
 import { format } from 'date-fns';
 
@@ -10,6 +10,7 @@ export default function PostPageData({
 }) {
 
     const [data, setData] = useState([]);
+    const scrollPosition = useRef(0);
 
     const fetchData = async () => {
         try {
@@ -32,6 +33,22 @@ export default function PostPageData({
         fetchData(); 
         console.log(page,query,  'running')
     }, [query.length, page]);
+
+    const handleScroll = () => {
+        scrollPosition.current = window.pageYOffset;
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, scrollPosition.current);
+    }, [data]);
 
     console.log(data, 'data ')
 
