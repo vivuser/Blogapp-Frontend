@@ -14,7 +14,7 @@ export default async function Page({ searchParams }) {
         <div className="mb-20">
             <Search />
             <PostPageData query={query} page={page}/>
-            <Pagination totalPages={3} />
+            <Pagination totalPages={4} />
         </div>
     )
 }

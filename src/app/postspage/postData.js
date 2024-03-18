@@ -16,8 +16,13 @@ export default function PostPageData({
              const response = await axios.get('http://localhost:3001/blogs', {
                 params: { query, page }
             });
-            console.log(response, 'reponse')
-            setData(prevData => ({...prevData.data}, response.data)); // Extracting data from the response and setting it to state
+            console.log(response, 'response')
+            if (query.length > 1){
+                console.log(query.length, 'length')
+            setData(response.data.data.values)
+            } else {
+            setData(prevData => [...prevData, ...response.data.data.values]);
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -25,18 +30,17 @@ export default function PostPageData({
 
     useEffect(() => {
         fetchData(); 
-        console.log(page, 'running')
-    }, [query, page]); // Add query and currentPage as dependencies to useEffect
+        console.log(page,query,  'running')
+    }, [query.length, page]);
 
-    console.log(data, 'jazdhami')
+    console.log(data, 'data ')
 
-    const { blogs } = data;
 
     return (
         <div>
-    <div className="max-w-screen-2xl mx-auto flex flex-wrap"></div>
-      {blogs?.map(post => (
-          <div key={post?._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4"> 
+    <div className="max-w-screen-2xl mx-auto flex flex-wrap">
+      {data?.map((post, index) => (
+          <div key={post?._id + '-' + index} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4"> 
             <article className="bg-white shadow-md rounded-md overflow-hidden transition-transform transform hover:scale-105">
                 <div className="p-6 h-60 w-80 bg-white flex flex-col justify-space-between justify-between overflow-hidden">
                   <h2 className="text-xl font-bold text-yellow-400">{post?.title}</h2>
@@ -47,6 +51,7 @@ export default function PostPageData({
              </article>
           </div>
         ))}
+        </div>
     </div>
     );
 }
