@@ -1,5 +1,5 @@
 'use client'
-import store from "@/app/redux/store";
+import store from "@/pages/redux/store";
 import { Provider } from "react-redux";
 
 

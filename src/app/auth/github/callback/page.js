@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import { useDispatch,useSelector } from "react-redux";
-import { login } from '@/app/redux/authSlice';
+import { login } from '@/pages/redux/authSlice';
 
 
 const GitHubCallbackPage = () => {
