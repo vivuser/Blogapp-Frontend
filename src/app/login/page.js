@@ -299,8 +299,8 @@ const handleSaveEdit = async () => {
           onClick={handleLogin}>
             Submit
           </button>
-          Or Login using
-          <button onClick={() => window.location.href = 'http://localhost:3001/auth/github/'}>
+          Or Login using (coming soon)
+          <button>
           <GitHubIcon className="mx-2"/>
           </button>
           </>
