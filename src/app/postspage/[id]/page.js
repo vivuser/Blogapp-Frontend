@@ -68,7 +68,7 @@
     //     useEffect(() => {
     //         fetchPost(params.id);
     //         incrementViews();
-    //     }, [])
+    //     }, [params.id, incrementViews])
 
     //     const handleComment = async () => {
     //         try{
