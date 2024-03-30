@@ -65,7 +65,7 @@
 //     useEffect(() => {
 //         fetchPost(params.id);
 //         incrementViews();
-//     }, [])
+//     }, [params.id, incrementViews])
 
 //     const handleComment = async () => {
 //         try{
@@ -222,7 +222,7 @@
 //                     <ul>
 //                         {post && post.length >0 && (<>
 //                         {(post[0].comment)?.map((comment) => (
-//                         <div className="flex justify-between m-4 bg-white p-1">
+//                         <div key={comment_.id} className="flex justify-between m-4 bg-white p-1">
 //                         <li key={comment._id} className="text-lg text-yellow-800 my-4 ml-3">{comment.author?.split(' ')[0]}:
 //                         {editedCommentId === comment._id ? (
 //                         <>
