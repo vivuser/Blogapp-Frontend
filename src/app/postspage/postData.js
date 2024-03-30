@@ -1,7 +1,7 @@
 "use client"
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import { Link } from "next/link";
+import  Link  from "next/link";
 import { format } from 'date-fns';
 
 
@@ -38,30 +38,13 @@ export default function PostPageData({
         console.log(page,query,  'running')
     }, [query.length, page]);
 
-    // const handleScroll = () => {
-    //     scrollPosition.current = window.pageYOffset;
-    // };
-
-    // useEffect(() => {
-    //     window.addEventListener('scroll', handleScroll);
-
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, []);
-
-    // useEffect(() => {
-    //     window.scrollTo(0, scrollPosition.current);
-    // }, [data]);
-
-    // console.log(data, 'data ')
-
 
     return (
         <div>
     <div className="max-w-screen-2xl mx-auto flex flex-wrap">
       {data?.map((post, index) => (
           <div key={post?._id + '-' + index} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4"> 
+            <Link  href={`postpage/${post._id}`}>
             <article className="bg-white shadow-md rounded-md overflow-hidden transition-transform transform hover:scale-105">
                 <div className="p-6 h-60 w-80 bg-white flex flex-col justify-space-between justify-between overflow-hidden">
                   <h2 className="text-xl font-bold text-yellow-400">{post?.title}</h2>
@@ -70,6 +53,7 @@ export default function PostPageData({
                   <h4 className="">{post?.author}<span className="m-1 text-orange-400">in {post?.tags}</span></h4>
                 </div>
              </article>
+             </Link>
           </div>
         ))}
         </div>
