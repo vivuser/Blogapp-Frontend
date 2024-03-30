@@ -15,10 +15,10 @@ export default function BasicCard() {
     const fetchBlogPosts = async () => {
       try {
         const response = await axios.get('http://localhost:3001/blogs/');
-        const blogPosts = response.data;
+        const blogPosts = response.data.data.values;
         console.log(blogPosts);
 
-        setPostViews([blogPosts]  );
+        setPostViews(blogPosts);
       } catch (error) {
         console.error('Error fetching blogs posts:', error)
       }
@@ -27,7 +27,8 @@ export default function BasicCard() {
   }, []);
 
   const allSortedPosts = postViews?.slice().sort((a,b) => b.views - a.views);
-  const sortedPosts = allSortedPosts.splice(0,4);
+  const sortedPosts = allSortedPosts?.splice(0,4);
+  console.log(allSortedPosts,' allsorted posts')
   console.log(sortedPosts, 'sortedposts')
 
   return ( sortedPosts.map((post) => (
@@ -42,9 +43,7 @@ export default function BasicCard() {
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {post.tags}
         </Typography>
-        <Typography variant="body2">
-          {post.content}
-        </Typography>
+        <Typography variant="body2" dangerouslySetInnerHTML={{ __html: post.content }} />
       </CardContent>
     </Card>))
 
