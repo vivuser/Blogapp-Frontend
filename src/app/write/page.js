@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
@@ -11,7 +12,9 @@ import { openSnackbar, closeSnackbar } from '../redux/commonSlice';
 import AutohideSnackbar from '../components/Snackbar';
 
 
+
 const Write = () => {
+
     const [open, setOpen] = useState(false);
     const [postContent, setPostContent] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
@@ -20,7 +23,9 @@ const Write = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state.auth.userData);
 
+    if (typeof window !== "undefined") {
     const userId = JSON.parse(localStorage.getItem('userData'))?.userId
+    }
 
     useEffect(() => {
         console.log('imageUrl has been updated:', imageUrl);
@@ -94,7 +99,8 @@ const Write = () => {
     }
 
 
-    return (
+
+    return  (
         <div className='max-w-3xl mx-auto flex flex-col'>   
         <AutohideSnackbar />
 
@@ -130,11 +136,12 @@ const Write = () => {
             <button 
             onClick={handleSubmit}
             className={`bg-${title.length ? 'yellow-300' : 'yellow-100'} rounded-full px-3 py-2 mx-auto
-                     hover:bg-yellow-400 font-bold text-slate-800`}>
+                     hover:bg-yellow-400 font-bold text-slate-800`}
+            >
                 Publish
             </button>
         </div>  
-    );
+    )
 }
 
 export default Write;

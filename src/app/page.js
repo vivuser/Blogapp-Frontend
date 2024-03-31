@@ -1,8 +1,7 @@
   'use client'
+  import dynamic from 'next/dynamic'
   import React from 'react';
-  import dynamic from 'next/dynamic';
   import { TableCell, TextField } from '@mui/material'
-  import Image from 'next/image'
   import { useEffect, useState } from 'react'
   import  axios  from 'axios';
   import { useDispatch, useSelector } from 'react-redux';
@@ -10,13 +9,11 @@
   import { CKEditor } from '@ckeditor/ckeditor5-react';
   import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   import TimelineIcon from '@mui/icons-material/Timeline';
-import SortedPost from './data/SortedPost';
-import BasicCard from './components/Card';
+  import BasicCard from './components/Card';
 
-
-
+  
   export default function Home() {
-    
+
     const [postContent, setPostContent] = useState('');
     const [title, setTitle] = useState('');
     const [showPad, setShowPad] = useState(false);
@@ -25,7 +22,6 @@ import BasicCard from './components/Card';
     const [postTopics, setPostTopics] = useState('') 
     const [matchingTags, setMatchingTags] = useState([])
     const [imageUrl, setImageUrl] = useState(null);
-    const [ postViews, setPostViews] = useState([])
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
     const dispatch = useDispatch();
     const router = useRouter();
@@ -35,6 +31,7 @@ import BasicCard from './components/Card';
 
   
     const handleImageUpload = async (file) => {
+      if (typeof window !== 'undefined') {
       try { 
       const formData = new FormData();  
       formData.append('file', file);
@@ -46,23 +43,32 @@ import BasicCard from './components/Card';
       console.error('Error uploading image:', error)
      }
     }
+  }
 
     
     const handleTagInputChange = (e) => {
+      if (typeof window !== 'undefined') {
       const inputText = e.target.value.toLowerCase();
       const matchingTags = availableTags.filter((tag) =>
       tag.toLowerCase().includes(inputText));
       setMatchingTags(matchingTags);
       setPostTopics(e.target.value);
     }
+  }
 
     const handleTagSelection = (selectedTag) => {
+      if (typeof window !== 'undefined') {
       setPostTopics(selectedTag);
       setMatchingTags([])
+      }
     };
 
+    useEffect(() => {
+    if (typeof window !== 'undefined') {
     const userId = JSON.parse(localStorage.getItem('userData'))?.userId
-
+    }
+  },[]);
+    
     const handleSubmit = async () => {
 
       try {
@@ -268,15 +274,6 @@ import BasicCard from './components/Card';
             
 
             <div className='pt-4'>
-            {/* <TextField
-            id="outlined-textarea"
-            label="Create a post"
-            placeholder="Create a post"
-            rows={12}
-            multiline
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
-          /> */}
                           <CKEditor
                       editor={ ClassicEditor }
                       data={postContent}
