@@ -10,7 +10,6 @@ export default function PostPageData({
 }) {
 
     const [data, setData] = useState([]);
-    const scrollPosition = useRef(0);
 
     useEffect(()=>{
         setData([...data,...responseData])
@@ -36,25 +35,7 @@ export default function PostPageData({
     useEffect(() => {
         fetchData(); 
         console.log(page,query,  'running')
-    }, [query.length, page]);
-
-    // const handleScroll = () => {
-    //     scrollPosition.current = window.pageYOffset;
-    // };
-
-    // useEffect(() => {
-    //     window.addEventListener('scroll', handleScroll);
-
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, []);
-
-    // useEffect(() => {
-    //     window.scrollTo(0, scrollPosition.current);
-    // }, [data]);
-
-    // console.log(data, 'data ')
+    }, [query, page]);
 
 
     return (
