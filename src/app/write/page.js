@@ -1,8 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-
-// import ReactQuill from 'react-quill';
-
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import './write.css';
@@ -27,9 +24,7 @@ const Write = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state.auth.userData);
 
-    if (typeof window !== "undefined") {
     const userId = JSON.parse(localStorage.getItem('userData'))?.userId
-    }
 
     useEffect(() => {
         console.log('imageUrl has been updated:', imageUrl);

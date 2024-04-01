@@ -1,6 +1,6 @@
 "use client"
 import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import  Link  from "next/link";
 import { format } from 'date-fns';
 
@@ -13,7 +13,7 @@ export default function PostPageData({
 
     useEffect(()=>{
         setData([...data,...responseData])
-    },[])
+    },[responseData])
 
     const fetchData = async () => {
         try {

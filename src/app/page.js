@@ -6,8 +6,6 @@
   import  axios  from 'axios';
   import { useDispatch, useSelector } from 'react-redux';
   import { useRouter } from 'next/navigation';
-  // import { CKEditor } from '@ckeditor/ckeditor5-react';
-  // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   import TimelineIcon from '@mui/icons-material/Timeline';
   import BasicCard from './components/Card';
 
@@ -41,7 +39,6 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
 
   
     const handleImageUpload = async (file) => {
-      if (typeof window !== 'undefined') {
       try { 
       const formData = new FormData();  
       formData.append('file', file);
@@ -52,25 +49,20 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
      } catch(error){
       console.error('Error uploading image:', error)
      }
-    }
   }
 
     
     const handleTagInputChange = (e) => {
-      if (typeof window !== 'undefined') {
       const inputText = e.target.value.toLowerCase();
       const matchingTags = availableTags.filter((tag) =>
       tag.toLowerCase().includes(inputText));
       setMatchingTags(matchingTags);
       setPostTopics(e.target.value);
-    }
   }
 
     const handleTagSelection = (selectedTag) => {
-      if (typeof window !== 'undefined') {
       setPostTopics(selectedTag);
       setMatchingTags([])
-      }
     };
 
     useEffect(() => {
