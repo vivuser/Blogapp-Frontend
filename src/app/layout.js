@@ -4,7 +4,7 @@ import Header from './header/page'
 import { Nunito } from 'next/font/google'
 import { Providers } from './redux/providers'
 import PageLoader from './components/PageLoader'
-
+import 'react-quill/dist/quill.bubble.css';
 
 const inter = Inter({ subsets: ['latin'] })
 

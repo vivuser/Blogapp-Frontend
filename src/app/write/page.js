@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.bubble.css';
+// import ReactQuill from 'react-quill';
+
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import './write.css';
@@ -10,6 +10,10 @@ import axios from 'axios';
 import { useDispatch, useSelector} from 'react-redux';
 import { openSnackbar, closeSnackbar } from '../redux/commonSlice';
 import AutohideSnackbar from '../components/Snackbar';
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(() => import('react-quill'), {
+    ssr: false
+})
 
 
 

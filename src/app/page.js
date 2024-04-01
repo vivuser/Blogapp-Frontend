@@ -6,10 +6,20 @@
   import  axios  from 'axios';
   import { useDispatch, useSelector } from 'react-redux';
   import { useRouter } from 'next/navigation';
-  import { CKEditor } from '@ckeditor/ckeditor5-react';
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+  // import { CKEditor } from '@ckeditor/ckeditor5-react';
+  // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
   import TimelineIcon from '@mui/icons-material/Timeline';
   import BasicCard from './components/Card';
+
+
+
+  const ClassicEditor = dynamic(() => import('@ckeditor/ckeditor5-build-classic'), {
+    ssr: false
+})
+
+const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
+  ssr: false
+})
 
   
   export default function Home() {
