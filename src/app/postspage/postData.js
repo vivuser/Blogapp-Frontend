@@ -39,7 +39,6 @@ export default function PostPageData({
 
 
     return (
-        <div>
     <div className="max-w-screen-2xl mx-auto flex flex-wrap">
       {data?.map((post, index) => (
           <div key={post?._id + '-' + index} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4"> 
@@ -56,6 +55,5 @@ export default function PostPageData({
           </div>
         ))}
         </div>
-    </div>
     );
 }

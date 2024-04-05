@@ -24,12 +24,13 @@ export default async function Page({ searchParams }) {
 const getData = await fetchData(searchParams);
 const query = searchParams?.query || '';
 const page = searchParams?.page || 1;
-
+    
 
     return (
         <div className="mb-20">
+        hello
             <Search />
-            <PostPageData query={query} page={page} data={getData?.values || []}/>
+            {/* <PostPageData query={query} page={page} data={getData?.values || []}/> */}
             <Pagination totalPages={Math.ceil(getData.total/10)}  />
         </div>
     )
