@@ -24,7 +24,10 @@ const Write = () => {
     const dispatch = useDispatch()
     const userData = useSelector((state) => state.auth.userData);
 
-    const userId = JSON.parse(localStorage.getItem('userData'))?.userId
+    let userId;
+    if (typeof window !== 'undefined') {
+        userId = JSON.parse(localStorage.getItem('userData'))?.userId;
+    }
 
     useEffect(() => {
         console.log('imageUrl has been updated:', imageUrl);
