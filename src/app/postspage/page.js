@@ -30,7 +30,7 @@ const page = searchParams?.page || 1;
         <div className="mb-20">
             <Search />
             {/* <PostPageData query={query} page={page} data={getData?.values || []}/> */}
-            {/* <Pagination totalPages={Math.ceil(getData.total/10)}  /> */}
+            <Pagination totalPages={Math.ceil(getData.total/10)}  />
         </div>
     )
 }
