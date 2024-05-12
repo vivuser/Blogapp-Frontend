@@ -43,7 +43,7 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
       const formData = new FormData();  
       formData.append('file', file);
 
-      const response = await axios.post('http://localhost:3001/blogs/image', formData)
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blogs/image`, formData)
       const uploadedImageUrl = response.data.imageUrl;
       setImageUrl(uploadedImageUrl)
      } catch(error){
@@ -75,7 +75,7 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
 
       try {
 
-        const response = await fetch('http://localhost:3001/blogs', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blogs`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
   const handleSaveTopics = async () => {
     try {
     console.log(userId, topics  )
-    const response = await axios.put(`http://localhost:3001/blogs/topics/${userId}`,
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blogs/topics/${userId}`,
     {topics: topics},
     )
     } catch (error) {
