@@ -3,6 +3,8 @@ let config = {
 };
 
 export function initTracker(userConfig) {
+    if (typeof window === "undefined") return; // ✅ add this
+
    if (window.__TRACKER_INITIALIZED__) {
     console.log("⚠️ Tracker already initialized");
     return;
@@ -55,19 +57,21 @@ function sendEvent(payload) {
 }
 
 function interceptFetch() {
-  const originalFetch = window.fetch
+  const originalFetch = window.fetch;
 
   window.fetch = async (...args) => {
     const url =
-      typeof args[0] === "string" ? args[0] : args[0]?.url;
+      typeof args[0] === "string"
+        ? args[0]
+        : args[0]?.url || "";
 
-    // ❌ 1. Ignore tracker backend calls (STOP LOOP)
+    console.log("🔍 URL:", url);
+
     if (url.includes("localhost:3001")) {
       return originalFetch(...args);
     }
 
-    // ❌ 2. Only track your FAIL API (CONTROL NOISE)
-    if (!url.includes("https://blogapp-backend-three.vercel.app")) {
+    if (!url.includes("blogapp-backend-three.vercel.app")) {
       return originalFetch(...args);
     }
 
@@ -76,21 +80,22 @@ function interceptFetch() {
     try {
       const response = await originalFetch(...args);
 
+      console.log("📡 Status:", response.status);
+
       if (!response.ok) {
         const type = getType(response.status);
 
-        console.log("🚨 Failure:", response.status);
-
         if (type) {
-          console.log(type, '<=type')
+          console.log("🚨 Sending event:", type);
+
           sendEvent({
             url,
             method: args[1]?.method || "GET",
             statusCode: response.status,
             type,
             timestamp: new Date().toISOString(),
-                      apiKey: config.apiKey,
-    environment: config.environment
+            apiKey: config.apiKey,
+            environment: config.environment
           });
         }
       }
@@ -105,8 +110,8 @@ function interceptFetch() {
         type: "NETWORK",
         error: error.message,
         timestamp: new Date().toISOString(),
-                  apiKey: config.apiKey,
-    environment: config.environment
+        apiKey: config.apiKey,
+        environment: config.environment
       });
 
       throw error;
