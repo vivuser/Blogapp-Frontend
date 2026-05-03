@@ -3,7 +3,9 @@ let config = {
 };
 
 export function initTracker(userConfig) {
-    if (typeof window === "undefined") return; // ✅ add this
+if (typeof window !== "undefined" && !window.__ORIGINAL_FETCH__) {
+  window.__ORIGINAL_FETCH__ = window.fetch;
+}
 
    if (window.__TRACKER_INITIALIZED__) {
     console.log("⚠️ Tracker already initialized");
@@ -40,11 +42,13 @@ export function initTracker(userConfig) {
 function sendEvent(payload) {
   console.log("📤 Sending to backend:", payload);
 
-  fetch(config.endpoint, {
+  const fetchFn = window.__ORIGINAL_FETCH__ || fetch;
+
+  fetchFn(config.endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-api-key": config.apiKey, // 👈 Required for backend auth
+      "x-api-key": config.apiKey,
     },
     body: JSON.stringify(payload),
   })
