@@ -152,6 +152,10 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
       setShowTags((prev) => !prev);
   }
 
+  const handleButClick =async () => {
+    await fetch('https://blogapp-backend-three.vercel.app/falafel/fail-500');
+  }
+
     return (
           <div className=''>
             
@@ -177,7 +181,7 @@ const {CKEditor} = dynamic(() => import('@ckeditor/ckeditor5-react'), {
 
             </div>
 
-
+          <button className='bg-green-300' onClick={handleButClick}>Trigger API</button>
 
           <div className='my-8'>
           <h1 className='text-xl'>
